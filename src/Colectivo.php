@@ -21,15 +21,8 @@ class Colectivo implements ColectivoInterface {
     }
 
     public function pagarCon(TarjetaInterface $tarjeta) {
-        if ($tarjeta->obtenerSaldo() >= 14.8) {
-            //$tarjeta->saldo -= 14.8; por ser un atributo protected no se puede acceder de esta manera
-            return (new Boleto(14.8,$this,$tarjeta));
-        }
-        return false;
-    /*
         if ($tarjeta->pagar(14.8)) return (new Boleto(14.8,$this,$tarjeta));
         return false;
-    */
     }
 
 }

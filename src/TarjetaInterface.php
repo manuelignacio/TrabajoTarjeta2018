@@ -21,7 +21,7 @@ interface TarjetaInterface {
      * @return float
      */
     public function obtenerSaldo();
-/*
+
     /**
      * Si el saldo es suficiente, lo resta por pagar un boleto del valor pedido
      * 
@@ -29,8 +29,7 @@ interface TarjetaInterface {
      * 
      * @return bool
      * Devuelve TRUE si el saldo es suficiente, o FALSE en caso contrario
-     * /
+     */
     public function pagar($valor);
-*/
 
 }
