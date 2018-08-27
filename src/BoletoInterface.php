@@ -7,7 +7,7 @@ interface BoletoInterface {
     /**
      * Devuelve el valor del boleto.
      *
-     * @return int
+     * @return float
      */
     public function obtenerValor();
 

@@ -4,9 +4,8 @@ namespace TrabajoTarjeta;
 
 class Boleto implements BoletoInterface {
 
-    protected $valor;
-
-    protected $colectivo;
+    protected $valor; // float
+    protected $colectivo; // ColectivoInterface
 
     public function __construct($valor, $colectivo, $tarjeta) {
         $this->valor = $valor;
@@ -16,7 +15,7 @@ class Boleto implements BoletoInterface {
     /**
      * Devuelve el valor del boleto.
      *
-     * @return int
+     * @return float
      */
     public function obtenerValor() {
         return $this->valor;
