@@ -18,4 +18,11 @@ interface BoletoInterface {
      */
     public function obtenerColectivo();
 
+    /**
+     * Devuelve un objeto que respresenta la tarjeta con la que se abonó.
+     *
+     * @return TarjetaInterface
+     */
+    public function obtenerTarjeta();
+
 }
