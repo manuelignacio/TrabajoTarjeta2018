@@ -22,6 +22,8 @@ class ColectivoTest extends TestCase {
         $tarjeta = new Tarjeta;
         $tarjeta->recargar(10);
 
+        $this->assertNotFalse($colectivo->pagarCon($tarjeta)); // no se usa assertTrue ya que lo que devuelve es un Boleto
+        $this->assertNotFalse($colectivo->pagarCon($tarjeta)); // puede viajar 2 veces con los viajes plus
         $this->assertFalse($colectivo->pagarCon($tarjeta)); // imposible viajar por saldo insuficiente
     }
 
