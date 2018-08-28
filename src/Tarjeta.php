@@ -3,6 +3,7 @@
 namespace TrabajoTarjeta;
 
 class Tarjeta implements TarjetaInterface {
+
     protected $saldo = 0; // float
     protected $plus = 0; // int
 

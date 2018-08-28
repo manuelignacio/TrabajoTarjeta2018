@@ -31,6 +31,7 @@ interface TarjetaInterface {
      * 
      * @return bool
      * Devuelve TRUE si puede pagar (si el saldo es suficiente o se abona con plus), o FALSE en caso contrario
+     * Devuelve TRUE si el saldo es suficiente, o FALSE en caso contrario
      */
     public function pagar($valor);
 

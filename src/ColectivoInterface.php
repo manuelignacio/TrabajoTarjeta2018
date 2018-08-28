@@ -30,8 +30,8 @@ interface ColectivoInterface {
      *
      * @param TarjetaInterface $tarjeta
      *
-     * @return BoletoInterface|FALSE
-     *  El boleto generado por el pago del viaje. O FALSE si no hay saldo
+     * @return BoletoInterface|false
+     *  El boleto generado por el pago del viaje. O false si no hay saldo
      *  suficiente en la tarjeta.
      */
     public function pagarCon(TarjetaInterface $tarjeta);
