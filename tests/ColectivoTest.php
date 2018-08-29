@@ -6,6 +6,9 @@ use PHPUnit\Framework\TestCase;
 
 class ColectivoTest extends TestCase {
 
+    /**
+     * Prueba que al viajar se reste saldo en la tarjeta y se emita un boleto correctamente
+     */
     public function testPagoConSaldo() {
         $colectivo = new Colectivo("102N","Semtur",23);
         $tarjeta = new Tarjeta;
@@ -17,6 +20,9 @@ class ColectivoTest extends TestCase {
         $this->assertEquals($boleto,$boletoEsperado); // el boleto emitido es correcto
     }
 
+    /**
+     * Prueba que si una tarjeta no puede pagar, no se emitira boleto al querer viajar
+     */
     public function testPagoSinSaldo() {
         $colectivo = new Colectivo("102R","Semtur",120);
         $tarjeta = new Tarjeta;
