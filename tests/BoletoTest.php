@@ -11,7 +11,7 @@ class BoletoTest extends TestCase {
      */
     public function testObtenerDatos() {
         $valor = 14.80;
-        $colectivo = new Colectivo;
+        $colectivo = new Colectivo("102R","Semtur",120);
         $tarjeta = new Tarjeta;
         $boleto = new Boleto($valor, $colectivo, $tarjeta);
 
