@@ -7,6 +7,10 @@ class Tarjeta implements TarjetaInterface {
     protected $saldo = 0; // float
     protected $plus = 0; // int
     protected $valorViaje = 14.8; // float
+    /**
+    * valorViaje corresponde al valor sin franquicia aplicada
+    * Luego el metodo obtenerViajePlus se encarga de aplicar las franquicias
+    */
 
     public function recargar($monto) {
       if ($monto == 10 || $monto == 20 || $monto == 30 || $monto == 50 || $monto == 100 || $monto == 510.15 || $monto == 962.59) {
@@ -30,7 +34,7 @@ class Tarjeta implements TarjetaInterface {
 
     public function pagar() {
       if ($this->saldo < 0) return false; // no se toleraran valores negativos
-      if ($this->saldo < $this->valorViaje) {
+      if ($this->saldo < $this->obtenerValorViaje()) {
         if ($this->plus > 1) return false; // como maximo podra adeudar 2 viajes plus
         $this->plus ++;
       }
