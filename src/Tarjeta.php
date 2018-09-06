@@ -6,10 +6,15 @@ class Tarjeta implements TarjetaInterface {
 
     protected $saldo = 0; // float
     protected $plus = 0; // int
+    protected $valorViaje = 14.8; // float
+    /**
+    * valorViaje corresponde al valor sin franquicia aplicada
+    * Luego el metodo obtenerViajePlus se encarga de aplicar las franquicias
+    */
 
     public function recargar($monto) {
       if ($monto == 10 || $monto == 20 || $monto == 30 || $monto == 50 || $monto == 100 || $monto == 510.15 || $monto == 962.59) {
-        $monto -= ($this->plus * 14.8); // el costo de los viajes plus siempre sera 14.8, independientemente de su franquicia
+        $monto -= ($this->plus * $this->valorViaje); // los viajes plus siempre valdran el valor completo, sin franquicia
         $this->saldo += $monto;
         $this->plus = 0;
         if ($monto == 510.15) $this->saldo += 81.93;
@@ -19,22 +24,21 @@ class Tarjeta implements TarjetaInterface {
       return false;
     }
 
-    /**
-     * Devuelve el saldo que le queda a la tarjeta.
-     *
-     * @return float
-     */
     public function obtenerSaldo() {
       return $this->saldo;
     }
 
-    public function pagar($valor) {
+    public function obtenerValorViaje() {
+      return $this->valorViaje;
+    }
+
+    public function pagar() {
       if ($this->saldo < 0) return false; // no se toleraran valores negativos
-      if ($this->saldo < $valor) {
-        if ($this->plus > 1) return false; // como maximo podra adeudar 2 viajes plus
+      if ($this->saldo < $this->obtenerValorViaje()) {
+        if ($this->plus >= 2) return false; // como maximo podra adeudar 2 viajes plus
         $this->plus ++;
       }
-      else $this->saldo -= $valor;
+      else $this->saldo -= $this->obtenerValorViaje();
       return true;
     }
 
