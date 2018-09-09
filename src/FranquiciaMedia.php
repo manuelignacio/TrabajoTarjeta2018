@@ -12,6 +12,12 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
         $this->tiempo = $tiempo;
     }
 
+    public function pagar() {
+        $pagara = parent::pagar();
+        if ($pagara) $this->tiempoUltimoViaje = $this->tiempo->actual();
+        return $pagara;
+    }
+
     protected function estaEnDiaUltimoViaje() {
         $ahora = $this->tiempo->actual();
         $diaAhora = (int)date("d",$ahora);

@@ -34,11 +34,12 @@ class Tarjeta implements TarjetaInterface {
 
     public function pagar() {
       if ($this->saldo < 0) return false; // no se toleraran valores negativos
-      if ($this->saldo < $this->obtenerValorViaje()) {
+      $precioViaje = $this->obtenerValorViaje();
+      if ($this->saldo < $precioViaje) {
         if ($this->plus >= 2) return false; // como maximo podra adeudar 2 viajes plus
         $this->plus ++;
       }
-      else $this->saldo -= $this->obtenerValorViaje();
+      else $this->saldo -= $precioViaje;
       return true;
     }
 
