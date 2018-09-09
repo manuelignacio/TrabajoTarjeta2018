@@ -126,15 +126,15 @@ class TarjetaTest extends TestCase {
         $this->assertTrue($tarjeta->pagar());
         $this->assertTrue($tarjeta->pagar());
 
-        $tarjeta->recargar(10); // se prueba a hacer una recarga
-        $this->assertEquals($tarjeta->obtenerSaldo(), 10);
-        $this->assertTrue($tarjeta->pagar()); // pero aun asi podra viajar
-        $this->assertEquals($tarjeta->obtenerSaldo(), 10); // sin descontarle el saldo
+        $this->assertFalse($tarjeta->recargar(12)); // se intenta recargar saldo invalido
+        $this->assertEquals($tarjeta->obtenerSaldo(), 0); // pero no se efectua
+        $this->assertTrue($tarjeta->pagar()); // y aun asi podra viajar
+        $this->assertEquals($tarjeta->obtenerSaldo(), 0); // sin variar el saldo
 
-        $tarjeta->recargar(510.15); // y aunque el monto sea muy alto
-        $this->assertEquals($tarjeta->obtenerSaldo(), 602.08); // y reciba bonificacion
-        $this->assertTrue($tarjeta->pagar()); // podra viajar
-        $this->assertEquals($tarjeta->obtenerSaldo(), 602.08); // sin descontarle el saldo
+        $this->assertFalse($tarjeta->recargar(510.15)); // y aunque la recarga sea valida, devuelve false
+        $this->assertEquals($tarjeta->obtenerSaldo(), 0); // no variara su saldo
+        $this->assertTrue($tarjeta->pagar()); // y podra viajar
+        $this->assertEquals($tarjeta->obtenerSaldo(), 0); // sin variar el saldo
     }
 
 }
