@@ -9,7 +9,7 @@ class Tarjeta implements TarjetaInterface {
     protected $valorViaje = 14.8; // float
     /**
     * valorViaje corresponde al valor sin franquicia aplicada
-    * Luego el metodo obtenerViajePlus se encarga de aplicar las franquicias
+    * Luego el metodo obtenerValorViaje se encarga de aplicar las franquicias
     */
 
     public function recargar($monto) {
