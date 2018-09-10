@@ -88,20 +88,18 @@ class TarjetaTest extends TestCase {
      * El valor de un viaje medio boleto se considera de 14.8/2 = 7.4
      */
     public function testViajesFranquiciaMedia() {
-        $tiempoReal = new Tiempo; // primero testeamos con un tiempo real
+        $tiempoReal = new Tiempo; // testeamos con el tiempo real
         $tarjetaReal = new FranquiciaMedia($tiempoReal);
 
-        $tarjetaReal->recargar(50); // saldo inicial: 20
+        $tarjetaReal->recargar(50); // saldo inicial: 50
         $this->assertTrue($tarjetaReal->pagar());
         $this->assertEquals($tarjetaReal->obtenerSaldo(), 42.6); // el viaje se cobra a mitad de precio
-        $tarjetaReal->pagar(); // se paga otro pasaje
-        $this->assertEquals($tarjetaReal->obtenerSaldo(), 35.2); // tambien a mitad de precio
-        $tarjetaReal->pagar(); // y del 3er viaje en adelante
-        $this->assertEquals($tarjetaReal->obtenerSaldo(), 20.4); // el precio sera normal, sin franquicia
-        $tarjetaReal->pagar();
-        $this->assertEquals($tarjetaReal->obtenerSaldo(), 5.6);
+        $this->assertFalse($tarjetaReal->pagar()); // se intenta pagar otro pasaje
+        $this->assertEquals($tarjetaReal->obtenerSaldo(), 42.6); // pero no pasaron 5 minutos del medio boleto anterior y no se viaja
+        $this->assertFalse($tarjetaReal->pagar()); // por muchas veces que intentemos
+        $this->assertFalse($tarjetaReal->pagar()); // porque el tiempo no pasa
 
-        $tiempo = new TiempoFalso; // despues creamos un tiempo manipulable para testear
+        $tiempo = new TiempoFalso(time()); // creamos un tiempo manipulable para testear
         $tarjeta = new FranquiciaMedia($tiempo);
 
         $tarjeta->recargar(10); // saldo inicial: 10
@@ -113,17 +111,17 @@ class TarjetaTest extends TestCase {
         $tarjeta->recargar(50); // se recargan 50
         $this->assertEquals($tarjeta->obtenerSaldo(), 37.8); // y se comprueba que la deuda de 1 plus fue saldada en la recarga al valor sin franquicia
 
-        $tiempo->avanzar(2 * 60); // hacemos avanzar el reloj 2 minutos
-        $this->assertTrue($tarjeta->pagar()); // con esto usamos el segundo medio boleto en el dia
+        $tiempo->avanzar(5 * 60); // hacemos avanzar el reloj 5 minutos para disponer de otro medio boleto
+        $this->assertTrue($tarjeta->pagar()); // usamos el segundo y ultimo medio boleto del dia
         $this->assertEquals($tarjeta->obtenerSaldo(), 30.4); // y dejamos el saldo a 30.4
-        $tiempo->avanzar(6 * 60); // ahora avanzamos 6 minutos
-        $tarjeta->pagar();
+        $tiempo->avanzar(2 * 60); // ahora avanzamos 2 minutos
+        $this->assertTrue($tarjeta->pagar()); // al no usar la franquicia, se puede viajar sin haber pasado 5 minutos
         $this->assertEquals($tarjeta->obtenerSaldo(), 15.6); // se tuvo que pagar sin franquicia en el 3er viaje
         $tarjeta->pagar();
         $this->assertEquals($tarjeta->obtenerSaldo(), 0.8); // y a partir del 3er viaje
 
         $tarjeta->pagar();
-        $tarjeta->pagar(); // se usaron 2 plus
+        $tarjeta->pagar(); // se debieron usar 2 plus
 
         $tarjeta->recargar(10); // y si se recarga poco con tanta deuda
         $this->assertEquals($tarjeta->obtenerSaldo(), -18.8); // el saldo quedara negativo porque se saldan los plus

@@ -4,7 +4,11 @@ namespace TrabajoTarjeta;
 
 class TiempoFalso implements TiempoInterface {
 
-    protected $time = 0;
+    protected $time;
+
+    public function __construct($inicio) {
+        $this->time = $inicio;
+    }
 
     public function actual() {
         return $this->time;
