@@ -6,8 +6,11 @@ class Tarjeta implements TarjetaInterface {
 
     protected $saldo = 0; // float
     protected $plus = 0; // int
+    protected $abonoPlus = false; // bool
     protected $valorViaje = 14.8; // float
     /**
+    * abonoPlus indica si el ultimo viaje efectuado uso un plus
+    * 
     * valorViaje corresponde al valor sin franquicia aplicada
     * Luego el metodo obtenerValorViaje se encarga de aplicar las franquicias
     */
@@ -32,14 +35,22 @@ class Tarjeta implements TarjetaInterface {
       return $this->valorViaje;
     }
 
+    public function abonoPlus() {
+      return $this->abonoPlus;
+    }
+
     public function pagar() {
       if ($this->saldo < 0) return false; // no se toleraran valores negativos
       $precioViaje = $this->obtenerValorViaje();
       if ($this->saldo < $precioViaje) {
         if ($this->plus >= 2) return false; // como maximo podra adeudar 2 viajes plus
         $this->plus ++;
+        $this->abonoPlus = true;
       }
-      else $this->saldo -= $precioViaje;
+      else {
+        $this->saldo -= $precioViaje;
+        $this->abonoPlus = false;
+      }
       return true;
     }
 

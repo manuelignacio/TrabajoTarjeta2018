@@ -4,33 +4,31 @@ namespace TrabajoTarjeta;
 
 class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
 
-    protected $franquiciaEnElDia = 0; // int
+    protected $usosEnElDia = 0; // int
     protected $tiempo; // TiempoInterface
-    protected $tiempoUltimoViaje = 0; // int
+    protected $tiempoUltimoViajeMedio = 0; // int
 
     public function __construct(TiempoInterface $tiempo) {
         $this->tiempo = $tiempo;
     }
 
-    public function pagar() {
-        $pagara = parent::pagar();
-        if ($pagara) $this->tiempoUltimoViaje = $this->tiempo->actual();
-        return $pagara;
-    }
-
-    protected function estaEnDiaUltimoViaje() {
-        $ahora = $this->tiempo->actual();
-        $diaAhora = (int)date("d",$ahora);
-        $diaUltimoViaje = (int)date("d",$this->tiempoUltimoViaje);
-        $diferencia = $ahora - $this->tiempoUltimoViaje;
-        return ($diferencia < 86400 && $diaAhora == $diaUltimoViaje);
-    }
-
     public function obtenerValorViaje() {
-        if (!$this->estaEnDiaUltimoViaje()) $this->franquiciaEnElDia = 0;
-        else if ($this->franquiciaEnElDia >= 2) return $this->valorViaje; // solo se pueden 2 medio boletos por dia
-        $this->franquiciaEnElDia++;
-        return ($this->valorViaje / 2); // precio de medio boleto
+        $ahora = $this->tiempo->actual();
+        $mismoDia = ((int)date("d",$ahora) == (int)date("d",$this->tiempoUltimoViajeMedio));
+        $diferenciaMenorAUnDia = (($ahora - $this->tiempoUltimoViajeMedio) < 86400);
+        if ($mismoDia && $diferenciaMenorAUnDia) {
+            if ($this->usosEnElDia >= 2) return $this->valorViaje;
+        }
+        else $this->usosEnElDia = 0;
+        return ($this->valorViaje / 2);
+    }
+
+    public function pagar() {
+        $paga = parent::pagar();
+        $pagaConFranquicia = ($paga && !$this->abonoPlus() && ($this->obtenerValorViaje() < parent::obtenerValorViaje()));
+        if ($pagaConFranquicia) $this->tiempoUltimoViajeMedio = $this->tiempo->actual();
+        if ($paga && !$this->abonoPlus()) $this->usosEnElDia++;
+        return $paga;
     }
 
 }
