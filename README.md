@@ -1,6 +1,9 @@
 Status en Travis:  
 [![Build Status](https://travis-ci.org/manuelignacio/TrabajoTarjeta2018.svg?branch=master)](https://travis-ci.org/manuelignacio/TrabajoTarjeta2018)
 
+Coverage Status:
+[![Coverage Status](https://coveralls.io/repos/github/manuelignacio/TrabajoTarjeta2018/badge.svg?branch=master)](https://coveralls.io/github/manuelignacio/TrabajoTarjeta2018?branch=master)
+
 #### Integrantes: Tadeo Schlieper y Manuel Lopez
 
 ---
@@ -136,3 +139,28 @@ Para evitar el uso de una tarjeta de tipo medio boleto en más de una persona en
 - Escribir un test que verifique efectivamente que no se deje marcar nuevamente al intentar realizar otro viaje en un intervalo menor a 5 minutos con la misma tarjeta medio boleto.
 Para el caso de medio boleto universitario, se pueden realizar solo dos viajes por día. El tercer viaje ya posee su valor normal.
 - Escribir un test que verifique que no se puedan realizar más de dos viajes por día.
+
+## Iteracion 4 (12 de Septiembre al 25 de Septiembre)
+
+### Cobertura de código.
+
+- Contar al menos con un 80% de cobertura de codigo en coveralls.io
+- Agregar el icono de coverals al README del proyecto.
+
+### Trasbordos
+
+Cuando se realiza un trasbordo, el 2º viaje se cancela a un 33% de la tarifa vigente:
+
+Se pueden abonar solamente con las tarjetas y se pueden realizar todos los días del año
+durante las 24 hs, **exceptuando la misma línea y bandera**, teniendo en cuenta tiempos
+máximos para realizarlos por franja horaria:
+
+- Lunes a viernes de 6 a 22 y sábados de 6 a 14 hs: tiempo máximo 60 minutos.
+- Sábados de las 14 a 22 hs, domingos y feriados de 6 a 22 hs: tiempo máximo 90
+minutos.
+- Noche, comprende franja horaria de 22 a 6 hs: tiempo máximo 90 minutos.
+
+Sólo se permite 1 trasbordo por tarjeta en cada viaje.
+
+Acercando la tarjeta se cancela el viaje emitiendo un boleto impreso con la palabra "trasbordo". No se efectiviza el trasbordo
+con la cancelación del pasaje plus.
