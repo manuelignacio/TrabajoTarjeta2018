@@ -7,6 +7,20 @@ use PHPUnit\Framework\TestCase;
 class ColectivoTest extends TestCase {
 
     /**
+     * Prueba que el constructor y los metodos de obtencion en un colectivo funcionen correctamente
+     */
+    public function testConstructor() {
+        $linea = "133N";
+        $empresa = "Semtur";
+        $numero = 250;
+        $colectivo = new Colectivo("133N","Semtur",250);
+        
+        $this->assertEquals($colectivo->linea(), $linea);
+        $this->assertEquals($colectivo->empresa(), $empresa);
+        $this->assertEquals($colectivo->numero(), $numero);
+    }
+
+    /**
      * Prueba que al viajar se reste saldo en la tarjeta y se emita un boleto correctamente
      */
     public function testPagoConSaldo() {
