@@ -38,16 +38,16 @@ class TarjetaTest extends TestCase {
      * Comprueba que la tarjeta no puede cargar montos invalidos.
      */
     public function testCargaMontoInvalido() {
-      $tarjeta = new Tarjeta;
+        $tarjeta = new Tarjeta;
 
-      $this->assertFalse($tarjeta->recargar(0));
-      $this->assertEquals($tarjeta->obtenerSaldo(), 0);
+        $this->assertFalse($tarjeta->recargar(0));
+        $this->assertEquals($tarjeta->obtenerSaldo(), 0);
 
-      $this->assertFalse($tarjeta->recargar(15));
-      $this->assertEquals($tarjeta->obtenerSaldo(), 0);
+        $this->assertFalse($tarjeta->recargar(15));
+        $this->assertEquals($tarjeta->obtenerSaldo(), 0);
 
-      $this->assertFalse($tarjeta->recargar(-10));
-      $this->assertEquals($tarjeta->obtenerSaldo(), 0);
+        $this->assertFalse($tarjeta->recargar(-10));
+        $this->assertEquals($tarjeta->obtenerSaldo(), 0);
     }
 
     /**
@@ -63,20 +63,16 @@ class TarjetaTest extends TestCase {
         $tarjeta->recargar(20); // saldo inicial: 20
         $this->assertTrue($tarjeta->pagar());
         $this->assertEquals($tarjeta->obtenerSaldo(), 5.2); // el saldo fue restado
-        $this->assertFalse($tarjeta->abonoPlus()); // sin usar plus
 
         $this->assertTrue($tarjeta->pagar()); // se adeuda un viaje plus
-        $this->assertTrue($tarjeta->abonoPlus()); // y se comprueba
         $this->assertEquals($tarjeta->obtenerSaldo(), 5.2); // pero el saldo no varia
         $tarjeta->recargar(10); // se recargan 10
         $this->assertEquals($tarjeta->obtenerSaldo(), 0.4); // pero se comprueba que la deuda de 1 plus fue saldada en la recarga
 
         $this->assertTrue($tarjeta->pagar()); // como el saldo es positivo sin plus pendientes se puede volver a adeudar
-        $this->assertTrue($tarjeta->abonoPlus()); // y se comprueba
         $this->assertTrue($tarjeta->pagar()); // ahora se adeudan 2 viajes plus
         $this->assertEquals($tarjeta->obtenerSaldo(), 0.4); // sin variar el saldo
         $this->assertFalse($tarjeta->pagar()); // y como ya no se puede adeudar mas, no puede pagar otro viaje, aunque el saldo sea positivo
-        $this->assertTrue($tarjeta->abonoPlus()); // pero se puede obtener que en el ultimo viaje efectuado abono plus
 
         $tarjeta->recargar(10); // si se recarga poco con tanta deuda
         $this->assertEquals($tarjeta->obtenerSaldo(), -19.2); // el saldo quedara negativo porque se saldan los plus
@@ -151,7 +147,6 @@ class TarjetaTest extends TestCase {
         $this->assertTrue($tarjeta->pagar()); // tantas veces como quiera
         $this->assertTrue($tarjeta->pagar());
         $this->assertTrue($tarjeta->pagar());
-        $this->assertFalse($tarjeta->abonoPlus()); // y en ningun momento se abonaron plus
 
         $this->assertFalse($tarjeta->recargar(12)); // se intenta recargar saldo invalido
         $this->assertEquals($tarjeta->obtenerSaldo(), 0); // pero no se efectua
