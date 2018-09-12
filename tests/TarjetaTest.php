@@ -67,20 +67,16 @@ class TarjetaTest extends TestCase {
         $this->assertTrue($tarjeta->pagar()); // se adeuda un viaje plus
         $this->assertEquals($tarjeta->obtenerSaldo(), 5.2); // pero el saldo no varia
         $tarjeta->recargar(10); // se recargan 10
-        $this->assertEquals($tarjeta->obtenerSaldo(), 0.4); // pero se comprueba que la deuda de 1 plus fue saldada en la recarga
+        $this->assertEquals($tarjeta->obtenerSaldo(), 15.2); // y en principio el plus queda pendiente
 
-        $this->assertTrue($tarjeta->pagar()); // como el saldo es positivo sin plus pendientes se puede volver a adeudar
-        $this->assertTrue($tarjeta->pagar()); // ahora se adeudan 2 viajes plus
-        $this->assertEquals($tarjeta->obtenerSaldo(), 0.4); // sin variar el saldo
-        $this->assertFalse($tarjeta->pagar()); // y como ya no se puede adeudar mas, no puede pagar otro viaje, aunque el saldo sea positivo
+        $this->assertTrue($tarjeta->pagar()); // como el saldo no es suficiente para viajar y devolver el plus, se adeuda otro plus
+        $this->assertFalse($tarjeta->pagar()); // y ya no puede viajar
+        $this->assertEquals($tarjeta->obtenerSaldo(), 15.2); // y el saldo sigue igual
 
-        $tarjeta->recargar(10); // si se recarga poco con tanta deuda
-        $this->assertEquals($tarjeta->obtenerSaldo(), -19.2); // el saldo quedara negativo porque se saldan los plus
-        $this->assertFalse($tarjeta->pagar()); // pero no se podra viajar hasta saldar la deuda
-
-        $tarjeta->recargar(50); // se salda la deuda
-        $this->assertTrue($tarjeta->pagar()); // y se puede volver a viajar
-        $this->assertEquals($tarjeta->obtenerSaldo(), 16); // saldo final: 16
+        $tarjeta->recargar(50); // se recarga suficiente
+        $this->assertEquals($tarjeta->obtenerSaldo(), 65.2);
+        $this->assertTrue($tarjeta->pagar()); // y con este viaje se pagan todos los plus
+        $this->assertEquals($tarjeta->obtenerSaldo(), 20.8); // saldo final: 20.8
     }
 
     /**
@@ -109,31 +105,29 @@ class TarjetaTest extends TestCase {
         $this->assertTrue($tarjeta->pagar()); // se adeuda un viaje plus y no deberia contar como un uso de la franquicia en el dia
         $this->assertEquals($tarjeta->obtenerSaldo(), 2.6); // y el saldo no varia
         $tarjeta->recargar(50); // se recargan 50
-        $this->assertEquals($tarjeta->obtenerSaldo(), 37.8); // y se comprueba que la deuda de 1 plus fue saldada en la recarga al valor sin franquicia
+        $this->assertEquals($tarjeta->obtenerSaldo(), 52.6);
 
         $tiempo->avanzar(5 * 60); // hacemos avanzar el reloj 5 minutos para disponer de otro medio boleto
-        $this->assertTrue($tarjeta->pagar()); // usamos el segundo y ultimo medio boleto del dia
+        $this->assertTrue($tarjeta->pagar()); // usamos el segundo y ultimo medio boleto del dia, ademas de devolver el plus
         $this->assertEquals($tarjeta->obtenerSaldo(), 30.4); // y dejamos el saldo a 30.4
         $tiempo->avanzar(2 * 60); // ahora avanzamos 2 minutos
-        $this->assertTrue($tarjeta->pagar()); // al no usar la franquicia, se puede viajar sin haber pasado 5 minutos
+        $this->assertTrue($tarjeta->pagar()); // al gastarse los 2 medios boletos del dia, se puede viajar sin haber pasado 5 minutos
         $this->assertEquals($tarjeta->obtenerSaldo(), 15.6); // se tuvo que pagar sin franquicia en el 3er viaje
         $tarjeta->pagar();
-        $this->assertEquals($tarjeta->obtenerSaldo(), 0.8); // y a partir del 3er viaje
+        $this->assertEquals($tarjeta->obtenerSaldo(), 0.8); // y sigue igual a partir del 3er viaje
 
         $tarjeta->pagar();
-        $tarjeta->pagar(); // se debieron usar 2 plus
-
-        $tarjeta->recargar(10); // y si se recarga poco con tanta deuda
-        $this->assertEquals($tarjeta->obtenerSaldo(), -18.8); // el saldo quedara negativo porque se saldan los plus
-        $this->assertFalse($tarjeta->pagar()); // pero no se podra viajar hasta saldar la deuda
-
-        $tarjeta->recargar(50); // se salda la deuda
-        $tarjeta->pagar(); // y se puede volver a viajar
-        $this->assertEquals($tarjeta->obtenerSaldo(), 16.4); // usando el precio sin franquicia
-
-        $tiempo->avanzar(86400); // se avanza 1 dia exacto desde el ultimo viaje
         $tarjeta->pagar();
-        $this->assertEquals($tarjeta->obtenerSaldo(), 9); // y ahora puede usar medio boleto otra vez
+        // se debieron usar 2 plus
+
+        $tarjeta->recargar(30);
+        $tarjeta->recargar(10); // se recargan 40
+        $this->assertEquals($tarjeta->obtenerSaldo(), 40.8); // este saldo alcanza para devolver 1 plus y viajar sin franquicia
+        $this->assertFalse($tarjeta->pagar()); // pero no se podra viajar por el 2do plus
+
+        $tiempo->avanzar(86400); // pero si se avanza 1 dia exacto desde el ultimo viaje
+        $this->assertTrue($tarjeta->pagar()); // si alcanza el saldo para devolver 2 plus mas un medio boleto
+        $this->assertEquals($tarjeta->obtenerSaldo(), 3.8); // saldo final: 3.8
     }
 
     /**
