@@ -53,6 +53,7 @@ class Tarjeta implements TarjetaInterface {
           $this->plusDevueltos = $this->plus;
           $this->plus = 0;
         }
+        else return false; // borrar esta linea para que, si se puede pagar el viaje, no necesariamente deba devolver los plus
         $this->saldo -= $precioViaje;
       }
       return true;
