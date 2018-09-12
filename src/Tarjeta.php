@@ -5,11 +5,13 @@ namespace TrabajoTarjeta;
 class Tarjeta implements TarjetaInterface {
 
     protected $saldo = 0; // float
-    protected $plus = 0; // int
-    protected $abonoPlus = false; // bool
     protected $valorViaje = 14.8; // float
+    protected $plus = 0; // int
+    protected $plusDevueltos = 0; // int
     /**
-    * abonoPlus indica si el ultimo viaje efectuado uso un plus
+    * plusDevueltos indica la cantidad de viajes plus que se devolvieron en
+    * el ultimo viaje efectuado, incluso cuando no se devuelva ninguno y
+    * entonces valga 0
     * 
     * valorViaje corresponde al valor sin franquicia aplicada
     * Luego el metodo obtenerValorViaje se encarga de aplicar las franquicias
@@ -17,9 +19,7 @@ class Tarjeta implements TarjetaInterface {
 
     public function recargar($monto) {
       if ($monto == 10 || $monto == 20 || $monto == 30 || $monto == 50 || $monto == 100 || $monto == 510.15 || $monto == 962.59) {
-        $monto -= ($this->plus * $this->valorViaje); // los viajes plus siempre valdran el valor completo, sin franquicia
         $this->saldo += $monto;
-        $this->plus = 0;
         if ($monto == 510.15) $this->saldo += 81.93;
         if ($monto == 962.59) $this->saldo += 221.58;
         return true;
@@ -35,21 +35,25 @@ class Tarjeta implements TarjetaInterface {
       return $this->valorViaje;
     }
 
-    public function abonoPlus() {
-      return $this->abonoPlus;
+    public function plusDevueltos() {
+      return $this->plusDevueltos;
     }
 
     public function pagar() {
       if ($this->saldo < 0) return false; // no se toleraran valores negativos
       $precioViaje = $this->obtenerValorViaje();
+      $precioPlusAdeudados = $this->plus * $this->valorViaje;
       if ($this->saldo < $precioViaje) {
         if ($this->plus >= 2) return false; // como maximo podra adeudar 2 viajes plus
-        $this->plus ++;
-        $this->abonoPlus = true;
+        ++$this->plus;
       }
       else {
+        if ($this->saldo >= $precioPlusAdeudados + $precioViaje) {
+          $precioViaje += $precioPlusAdeudados; // precioViaje ahora suma el precio total
+          $this->plusDevueltos = $this->plus;
+          $this->plus = 0;
+        }
         $this->saldo -= $precioViaje;
-        $this->abonoPlus = false;
       }
       return true;
     }

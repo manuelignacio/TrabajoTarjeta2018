@@ -6,7 +6,7 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
 
     protected $usosEnElDia = 0; // int
     protected $tiempo; // TiempoInterface
-    protected $tiempoUltimoViajeMedio = 0; // int
+    protected $tiempoUltimoViajeConFranquicia = 0; // int
 
     public function __construct(TiempoInterface $tiempo) {
         $this->tiempo = $tiempo;
@@ -14,8 +14,8 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
 
     public function obtenerValorViaje() {
         $ahora = $this->tiempo->actual();
-        $mismoDia = ((int)date("d",$ahora) == (int)date("d",$this->tiempoUltimoViajeMedio));
-        $diferenciaMenorA24hs = (($ahora - $this->tiempoUltimoViajeMedio) < (24 * 60 * 60));
+        $mismoDia = ((int)date("d",$ahora) == (int)date("d",$this->tiempoUltimoViajeConFranquicia));
+        $diferenciaMenorA24hs = (($ahora - $this->tiempoUltimoViajeConFranquicia) < (24 * 60 * 60));
         if ($mismoDia && $diferenciaMenorA24hs) {
             if ($this->usosEnElDia >= 2) return $this->valorViaje;
         }
@@ -26,13 +26,14 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
     public function pagar() {
         $valor = $this->obtenerValorViaje();
         $pagaPlus = ($valor > $this->obtenerSaldo());
-        $pagaMedio = !$pagaPlus && ($this->obtenerValorViaje() < parent::obtenerValorViaje());
-        if ($pagaMedio && ($this->tiempo->actual() - $this->tiempoUltimoViajeMedio) < (5 * 60))
+        $aplicaFranquicia = !$pagaPlus && ($valor < parent::obtenerValorViaje());
+        if ($aplicaFranquicia && ($this->tiempo->actual() - $this->tiempoUltimoViajeConFranquicia) < (5 * 60))
             return false; // no podran pasar menos de 5 min entre medio boleto y otro
         $paga = parent::pagar();
-        $usaFranquicia = ($paga && $pagaMedio);
-        if ($usaFranquicia) $this->tiempoUltimoViajeMedio = $this->tiempo->actual();
-        if ($paga && !$pagaPlus) $this->usosEnElDia++;
+        if ($paga) {
+            if ($aplicaFranquicia) $this->tiempoUltimoViajeConFranquicia = $this->tiempo->actual();
+            if (!$pagaPlus) $this->usosEnElDia++;
+        }
         return $paga;
     }
 
