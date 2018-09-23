@@ -30,6 +30,14 @@ interface TarjetaInterface {
     public function obtenerValorViaje();
 
     /**
+     * Devuelve la cantidad de viajes plus abonados (devueltos) en el último viaje efectuado.
+     * Si en el último viaje se usó un viaje plus, no se ha devuelto ningún plus.
+     * 
+     * @return int
+     */
+    public function plusDevueltos();
+
+    /**
      * Si el saldo es suficiente, lo resta por pagar un boleto del valor pedido
      * Si el saldo es insuficiente, suma un viaje plus de deuda, hasta el maximo permitido
      * 

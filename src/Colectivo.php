@@ -27,7 +27,8 @@ class Colectivo implements ColectivoInterface {
     }
 
     public function pagarCon(TarjetaInterface $tarjeta) {
-        if ($tarjeta->pagar()) return (new Boleto($tarjeta->obtenerValorViaje(),$this,$tarjeta));
+        $valorViaje = $tarjeta->obtenerValorViaje(); // se obtiene el valor del viaje que se va a efectuar
+        if ($tarjeta->pagar()) return (new Boleto($valorViaje,$this,$tarjeta));
         return false;
     }
 
