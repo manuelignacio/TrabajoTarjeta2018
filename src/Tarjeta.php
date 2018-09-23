@@ -9,12 +9,14 @@ class Tarjeta implements TarjetaInterface {
     protected $plus = 0; // int
     protected $plusDevueltos = 0; // int
     /**
+    * valorViaje corresponde al valor sin franquicia aplicada
+    * Luego el metodo obtenerValorViaje se encarga de aplicar las franquicias
+    * 
+    * plus indica cuantos viajes plus se estan debiendo actualmente
+    * 
     * plusDevueltos indica la cantidad de viajes plus que se devolvieron en
     * el ultimo viaje efectuado, incluso cuando no se devuelva ninguno y
     * entonces valga 0
-    * 
-    * valorViaje corresponde al valor sin franquicia aplicada
-    * Luego el metodo obtenerValorViaje se encarga de aplicar las franquicias
     */
 
     public function recargar($monto) {
@@ -41,20 +43,21 @@ class Tarjeta implements TarjetaInterface {
 
     public function pagar() {
       if ($this->saldo < 0) return false; // no se toleraran valores negativos
+
       $precioViaje = $this->obtenerValorViaje();
       $precioPlusAdeudados = $this->plus * $this->valorViaje;
-      if ($this->saldo < $precioViaje) {
+      $precioTotal = $precioViaje + $precioPlusAdeudados;
+      $pagaPlus = $this->saldo < $precioTotal;
+
+      if ($pagaPlus) {
         if ($this->plus >= 2) return false; // como maximo podra adeudar 2 viajes plus
         ++$this->plus;
+        $this->plusDevueltos = 0;
       }
       else {
-        if ($this->saldo >= $precioPlusAdeudados + $precioViaje) {
-          $precioViaje += $precioPlusAdeudados; // precioViaje ahora suma el precio total
-          $this->plusDevueltos = $this->plus;
-          $this->plus = 0;
-        }
-        else return false; // borrar esta linea para que, si se puede pagar el viaje, no necesariamente deba devolver los plus
-        $this->saldo -= $precioViaje;
+        $this->plusDevueltos = $this->plus;
+        $this->plus = 0;
+        $this->saldo -= $precioTotal;
       }
       return true;
     }
