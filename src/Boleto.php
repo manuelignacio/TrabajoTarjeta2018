@@ -7,7 +7,7 @@ class Boleto implements BoletoInterface {
     protected $valor; // float
     protected $colectivo; // ColectivoInterface
     protected $tarjeta; // TarjetaInterface
-    protected $fecha; // int
+    protected $fecha; // string
     protected $tarjetaTipo; // string
     protected $tarjetaID; // int
     protected $tarjetaSaldo; // float
@@ -19,21 +19,22 @@ class Boleto implements BoletoInterface {
         $this->colectivo = $colectivo;
         $this->tarjeta = $tarjeta;
         // todos los valores internos de la tarjeta se asignan en el constructor para que no varien con el uso de la misma
-        $this->fecha = $tarjeta->obtenerFechaUltimoViaje();
+        $this->fecha = date("d/m/Y H:i:s", $tarjeta->obtenerFechaUltimoViaje());
         $this->tarjetaTipo = $tarjeta->obtenerTipo();
         $this->tarjetaID = $tarjeta->obtenerId();
         $this->tarjetaSaldo = $tarjeta->obtenerSaldo();
         $plusAbonados = $tarjeta->obtenerPlusDevueltos() * $tarjeta->obtenerValor();
         $this->totalAbonado = (int)(!$tarjeta->obtenerUsoPlus()) * ($valor + $plusAbonados);
         $this->descripcion = "";
-        $this->descripcion .= "Linea: {$colectivo->linea()}\n";
-        $this->descripcion .= date("d/m/Y H:i:s", $this->fecha) . "\n";
+        $this->descripcion .= "Linea: {$colectivo->linea()}\n{$this->fecha}\n";
         if ($tarjeta->obtenerUsoPlus()) $this->descripcion .= "Viaje Plus \$0.00\n";
         else {
-            if ($tarjeta->obtenerPlusDevueltos() > 0) $this->descripcion .= "Abona {$tarjeta->obtenerPlusDevueltos()} Viajes Plus {$plusAbonados} y\n";
-            $this->descripcion .= "Tarros: {$valor}\nTotal abonado: \${$this->totalAbonado}\n";
+            if ($valor == $tarjeta->obtenerValor()) $this->descripcion .= "Normal\n";
+            else $this->descripcion .= "{$this->tarjetaTipo}\n";
+            if ($tarjeta->obtenerPlusDevueltos() > 0) $this->descripcion .= "Abona {$tarjeta->obtenerPlusDevueltos()} Viajes Plus \${$plusAbonados} y\n";
+            $this->descripcion .= "Tarros: \${$valor}\nTotal abonado: \${$this->totalAbonado}\n";
         }
-        $this->descripcion .= "Saldo(S.E.U.O): \${$this->tarjetaSaldo}";
+        $this->descripcion .= "Saldo(S.E.U.O): \${$this->tarjetaSaldo}\nID Tarjeta: {$this->tarjetaID}";
     }
 
     public function obtenerValor() {

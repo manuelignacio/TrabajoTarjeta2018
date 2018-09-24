@@ -63,22 +63,21 @@ class TarjetaTest extends TestCase {
         $tarjeta->recargar(20); // saldo inicial: 20
         $this->assertTrue($tarjeta->pagar());
         $this->assertEquals($tarjeta->obtenerSaldo(), 5.2); // el saldo fue restado
-        $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 0);
+        $this->assertFalse($tarjeta->obtenerUsoPlus()); // sin usarse plus
 
         $this->assertTrue($tarjeta->pagar()); // se adeuda un viaje plus
+        $this->assertTrue($tarjeta->obtenerUsoPlus());
         $this->assertEquals($tarjeta->obtenerSaldo(), 5.2); // pero el saldo no varia
         $tarjeta->recargar(10); // se recargan 10
         $this->assertEquals($tarjeta->obtenerSaldo(), 15.2); // y en principio el plus queda pendiente
-        $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 0);
+        $this->assertTrue($tarjeta->obtenerUsoPlus()); // debe seguir indicando que se uso un plus en el ultimo viaje
 
         $this->assertTrue($tarjeta->pagar()); // como el saldo no es suficiente para viajar y devolver el plus, se adeuda otro plus
         $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 0); // sin haberse devuelto el otro
         $this->assertFalse($tarjeta->pagar()); // y ya no puede viajar
-        $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 0);
         $this->assertEquals($tarjeta->obtenerSaldo(), 15.2); // y el saldo sigue igual
 
         $tarjeta->recargar(50); // se recarga suficiente
-        $this->assertEquals($tarjeta->obtenerSaldo(), 65.2);
         $this->assertTrue($tarjeta->pagar()); // y con este viaje se pagan todos los plus
         $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 2); // podemos comprobar que se devolvieron 2 plus
         $this->assertEquals($tarjeta->obtenerSaldo(), 20.8); // saldo final: 20.8
@@ -97,6 +96,7 @@ class TarjetaTest extends TestCase {
         $this->assertEquals($tarjetaReal->obtenerSaldo(), 42.6); // el viaje se cobra a mitad de precio
         $this->assertFalse($tarjetaReal->pagar()); // se intenta pagar otro pasaje
         $this->assertEquals($tarjetaReal->obtenerSaldo(), 42.6); // pero no pasaron 5 minutos del medio boleto anterior y no se viaja
+        $this->assertFalse($tarjetaReal->obtenerUsoPlus());
         $this->assertFalse($tarjetaReal->pagar()); // por muchas veces que intentemos
         $this->assertFalse($tarjetaReal->pagar()); // porque el tiempo no pasa
 
@@ -106,11 +106,10 @@ class TarjetaTest extends TestCase {
         $tarjeta->recargar(10); // saldo inicial: 10
         $this->assertTrue($tarjeta->pagar());
         $this->assertEquals($tarjeta->obtenerSaldo(), 2.6); // el saldo fue restado con franquicia media
-        $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 0);
 
         $this->assertTrue($tarjeta->pagar()); // se adeuda un viaje plus y no deberia contar como un uso de la franquicia en el dia
         $this->assertEquals($tarjeta->obtenerSaldo(), 2.6); // y el saldo no varia
-        $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 0);
+        $this->assertTrue($tarjeta->obtenerUsoPlus());
         $tarjeta->recargar(50); // se recargan 50
         $this->assertEquals($tarjeta->obtenerSaldo(), 52.6);
 
@@ -124,11 +123,10 @@ class TarjetaTest extends TestCase {
         $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 0);
         $tarjeta->pagar(); // es innecesario testear
         $this->assertEquals($tarjeta->obtenerSaldo(), 0.8); // y sigue igual a partir del 3er viaje
-        $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 0);
 
         $tarjeta->pagar();
         $tarjeta->pagar();
-        $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 0);
+        $this->assertTrue($tarjeta->obtenerUsoPlus());
         // se debieron usar 2 plus
 
         $tarjeta->recargar(30);
@@ -164,6 +162,7 @@ class TarjetaTest extends TestCase {
         $this->assertEquals($tarjeta->obtenerSaldo(), 0); // no variara su saldo
         $this->assertTrue($tarjeta->pagar()); // y podra viajar
         $this->assertEquals($tarjeta->obtenerSaldo(), 0); // sin variar el saldo
+        $this->assertFalse($tarjeta->obtenerUsoPlus());
         $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 0); // y sin recurrir a viajes plus
     }
 

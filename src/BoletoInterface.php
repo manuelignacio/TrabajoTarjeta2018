@@ -26,7 +26,7 @@ interface BoletoInterface {
     public function obtenerTarjeta();
 
     /**
-     * Devuelve la fecha en la que se emitio el boleto.
+     * Devuelve la fecha en la que se emitio el boleto en formato d/m/Y H:i:s
      * 
      * @return int
      */
