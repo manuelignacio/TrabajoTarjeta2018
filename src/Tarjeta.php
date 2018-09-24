@@ -8,6 +8,8 @@ class Tarjeta implements TarjetaInterface {
     protected $valorViaje = 14.8; // float
     protected $plus = 0; // int
     protected $plusDevueltos = 0; // int
+    protected $tiempo; // TiempoInterface
+    protected $fechaUltimoViaje; // int
     /**
     * valorViaje corresponde al valor sin franquicia aplicada
     * Luego el metodo obtenerValorViaje se encarga de aplicar las franquicias
@@ -18,6 +20,14 @@ class Tarjeta implements TarjetaInterface {
     * el ultimo viaje efectuado, incluso cuando no se devuelva ninguno y
     * entonces valga 0
     */
+
+    public function __construct(TiempoInterface $tiempo) {
+      $this->tiempo = $tiempo;
+    }
+
+    public function obtenerFechaUltimoViaje() {
+      return $this->fechaUltimoViaje;
+    }
 
     public function recargar($monto) {
       if ($monto == 10 || $monto == 20 || $monto == 30 || $monto == 50 || $monto == 100 || $monto == 510.15 || $monto == 962.59) {
@@ -59,6 +69,7 @@ class Tarjeta implements TarjetaInterface {
         $this->plus = 0;
         $this->saldo -= $precioTotal;
       }
+      $this->fechaUltimoViaje = $this->tiempo->actual();
       return true;
     }
 

@@ -5,6 +5,13 @@ namespace TrabajoTarjeta;
 interface TarjetaInterface {
 
     /**
+     * Devuelve la fecha en la que se viajó por última vez.
+     * 
+     * @return int
+     */
+    public function obtenerFechaUltimoViaje();
+
+    /**
      * Recarga una tarjeta con un cierto valor de dinero.
      *
      * @param float $monto

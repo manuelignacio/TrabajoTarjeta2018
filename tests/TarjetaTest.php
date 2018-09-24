@@ -10,7 +10,7 @@ class TarjetaTest extends TestCase {
      * Comprueba que la tarjeta aumenta su saldo cuando se carga cualquiera de los montos validos.
      */
     public function testCargaMontoValido() {
-        $tarjeta = new Tarjeta;
+        $tarjeta = new Tarjeta(new Tiempo);
 
         $this->assertTrue($tarjeta->recargar(10));
         $this->assertEquals($tarjeta->obtenerSaldo(), 10);
@@ -38,7 +38,7 @@ class TarjetaTest extends TestCase {
      * Comprueba que la tarjeta no puede cargar montos invalidos.
      */
     public function testCargaMontoInvalido() {
-        $tarjeta = new Tarjeta;
+        $tarjeta = new Tarjeta(new Tiempo);
 
         $this->assertFalse($tarjeta->recargar(0));
         $this->assertEquals($tarjeta->obtenerSaldo(), 0);
@@ -58,7 +58,7 @@ class TarjetaTest extends TestCase {
      * El valor de un viaje sin franquicia se consideran de 14.8
      */
     public function testViajesSinFranquicia() {
-        $tarjeta = new Tarjeta;
+        $tarjeta = new Tarjeta(new Tiempo);
 
         $tarjeta->recargar(20); // saldo inicial: 20
         $this->assertTrue($tarjeta->pagar());
@@ -148,7 +148,7 @@ class TarjetaTest extends TestCase {
      * Esta tarjeta siempre debe poder viajar.
      */
     public function testViajesFranquiciaCompleta() {
-        $tarjeta = new FranquiciaCompleta;
+        $tarjeta = new FranquiciaCompleta(new Tiempo);
 
         $this->assertTrue($tarjeta->pagar()); // puede viajar desde el comienzo
         $this->assertTrue($tarjeta->pagar()); // tantas veces como quiera
