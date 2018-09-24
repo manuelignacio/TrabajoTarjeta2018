@@ -25,6 +25,10 @@ class Tarjeta implements TarjetaInterface {
       $this->tiempo = $tiempo;
     }
 
+    public function tipo() {
+      return "Normal";
+    }
+
     public function obtenerFechaUltimoViaje() {
       return $this->fechaUltimoViaje;
     }

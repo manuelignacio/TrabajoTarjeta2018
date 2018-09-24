@@ -7,6 +7,10 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
     protected $usosEnElDia = 0; // int
     protected $fechaUltimoViajeConFranquicia = 0; // int
 
+    public function tipo() {
+        return "Medio Boleto";
+    }
+
     public function obtenerValorViaje() {
         $ahora = $this->tiempo->actual();
         $mismoDia = ((int)date("d",$ahora) == (int)date("d",$this->fechaUltimoViajeConFranquicia));

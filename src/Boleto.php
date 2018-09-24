@@ -7,7 +7,8 @@ class Boleto implements BoletoInterface {
     protected $valor; // float
     protected $colectivo; // ColectivoInterface
     protected $tarjeta; // TarjetaInterface
-    protected $fecha;
+    protected $fecha; // int
+    protected $tarjetaTipo; // string
 
     public function __construct($valor, $colectivo, $tarjeta) {
         $this->valor = $valor;
@@ -15,6 +16,7 @@ class Boleto implements BoletoInterface {
         $this->tarjeta = $tarjeta;
         // todos los valores internos de la tarjeta se asignan en el constructor para que no varien con el uso de la misma
         $this->fecha = $tarjeta->obtenerFechaUltimoViaje();
+        $this->tarjetaTipo = $tarjeta->tipo();
     }
 
     public function obtenerValor() {

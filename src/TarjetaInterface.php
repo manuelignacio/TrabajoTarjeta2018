@@ -5,6 +5,13 @@ namespace TrabajoTarjeta;
 interface TarjetaInterface {
 
     /**
+     * Devuelve el tipo de franquicia a la que pertenece la tarjeta.
+     * 
+     * @return string
+     */
+    public function tipo();
+
+    /**
      * Devuelve la fecha en la que se viajó por última vez.
      * 
      * @return int

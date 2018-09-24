@@ -4,6 +4,10 @@ namespace TrabajoTarjeta;
 
 class FranquiciaCompleta extends Tarjeta implements TarjetaInterface {
 
+    public function tipo() {
+        return "Franquicia Completa";
+    }
+
     public function recargar($monto) {
         return false;
     }
