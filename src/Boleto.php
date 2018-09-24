@@ -12,6 +12,7 @@ class Boleto implements BoletoInterface {
     protected $totalAbonado; // float
     protected $tarjetaSaldo; // float
     protected $tarjetaID; // int
+    protected $descripcion; // string
 
     public function __construct($valor, $colectivo, $tarjeta) {
         $this->valor = $valor;
@@ -23,6 +24,12 @@ class Boleto implements BoletoInterface {
         $this->totalAbonado = (int)(!$tarjeta->obtenerUsoPlus()) * ($valor + $tarjeta->obtenerPlusDevueltos() * $tarjeta->obtenerValor());
         $this->tarjetaSaldo = $tarjeta->obtenerSaldo();
         $this->tarjetaID = $tarjeta->obtenerId();
+        $this->descripcion = "";
+        if ($tarjeta->obtenerUsoPlus()) $this->descripcion = "Viaje Plus";
+        else {
+            if ($tarjeta->obtenerPlusDevueltos() > 0) $this->descripcion = "Abona {$tarjeta->obtenerPlusDevueltos()} Viajes Plus\n";
+            $this->descripcion .= $this->totalAbonado;
+        }
     }
 
     public function obtenerValor() {
