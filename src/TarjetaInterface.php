@@ -12,11 +12,11 @@ interface TarjetaInterface {
     public function tipo();
 
     /**
-     * Devuelve la fecha en la que se viajó por última vez.
+     * Devuelve siempre el valor entero de un viaje normal sin franquicia
      * 
-     * @return int
+     * @return float
      */
-    public function obtenerFechaUltimoViaje();
+    public function valor();
 
     /**
      * Recarga una tarjeta con un cierto valor de dinero.
@@ -44,14 +44,6 @@ interface TarjetaInterface {
     public function obtenerValorViaje();
 
     /**
-     * Devuelve la cantidad de viajes plus abonados (devueltos) en el último viaje efectuado.
-     * Si en el último viaje se usó un viaje plus, no se ha devuelto ningún plus.
-     * 
-     * @return int
-     */
-    public function plusDevueltos();
-
-    /**
      * Si el saldo es suficiente, lo resta por pagar un boleto del valor pedido
      * Si el saldo es insuficiente, suma un viaje plus de deuda, hasta el maximo permitido
      * 
@@ -60,5 +52,27 @@ interface TarjetaInterface {
      * Devuelve TRUE si el saldo es suficiente, o FALSE en caso contrario
      */
     public function pagar();
+
+    /**
+     * Devuelve la fecha en la que se viajó por última vez.
+     * 
+     * @return int
+     */
+    public function obtenerFechaUltimoViaje();
+
+    /**
+     * Devuelve la cantidad de viajes plus abonados (devueltos) en el último viaje efectuado.
+     * Si en el último viaje se usó un viaje plus, no se ha devuelto ningún plus.
+     * 
+     * @return int
+     */
+    public function plusDevueltos();
+    
+    /**
+     * Devuelve true si el último viaje realizado fue hecho con plus.
+     * 
+     * @return bool
+     */
+    public function usoPlus();
 
 }

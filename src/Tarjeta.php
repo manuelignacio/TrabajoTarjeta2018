@@ -8,8 +8,9 @@ class Tarjeta implements TarjetaInterface {
     protected $valorViaje = 14.8; // float
     protected $plus = 0; // int
     protected $plusDevueltos = 0; // int
+    protected $usoPlus = false;
     protected $tiempo; // TiempoInterface
-    protected $fechaUltimoViaje; // int
+    protected $fechaUltimoViaje = 0; // int
     /**
     * valorViaje corresponde al valor sin franquicia aplicada
     * Luego el metodo obtenerValorViaje se encarga de aplicar las franquicias
@@ -29,8 +30,8 @@ class Tarjeta implements TarjetaInterface {
       return "Normal";
     }
 
-    public function obtenerFechaUltimoViaje() {
-      return $this->fechaUltimoViaje;
+    public function valor() {
+      return $this->valorViaje;
     }
 
     public function recargar($monto) {
@@ -51,30 +52,40 @@ class Tarjeta implements TarjetaInterface {
       return $this->valorViaje;
     }
 
-    public function plusDevueltos() {
-      return $this->plusDevueltos;
-    }
-
     public function pagar() {
       if ($this->saldo < 0) return false; // no se toleraran valores negativos
-
+      
       $precioViaje = $this->obtenerValorViaje();
       $precioPlusAdeudados = $this->plus * $this->valorViaje;
       $precioTotal = $precioViaje + $precioPlusAdeudados;
       $pagaPlus = $this->saldo < $precioTotal;
-
+      
       if ($pagaPlus) {
         if ($this->plus >= 2) return false; // como maximo podra adeudar 2 viajes plus
         ++$this->plus;
+        $this->usoPlus = true;
         $this->plusDevueltos = 0;
       }
       else {
         $this->plusDevueltos = $this->plus;
         $this->plus = 0;
         $this->saldo -= $precioTotal;
+        $this->usoPlus = false;
       }
       $this->fechaUltimoViaje = $this->tiempo->actual();
       return true;
+    }
+    
+    public function obtenerFechaUltimoViaje() {
+      return $this->fechaUltimoViaje;
+    }
+    
+    public function plusDevueltos() {
+      return $this->plusDevueltos;
+    }
+
+    public function usoPlus() {
+      return $this->usoPlus;
     }
 
 }
