@@ -16,18 +16,26 @@ class BoletoTest extends TestCase {
 
         $boleto = new Boleto($tarjeta->obtenerValorViaje(), $colectivo, $tarjeta);
 
-        $descripcion = "Linea: 102R\n01/01/1970 01:00:00\nNormal\nTarros: \$14.8\nTotal abonado: \$14.8\nSaldo(S.E.U.O): \$0\nID Tarjeta: 1";
+        /**
+         * Existe un conflicto entre la interpretación de fecha en Travis y en PHPUnit instalado con PHP 7.2.4
+         */
+        $descripcion1 = "Linea: 102R\n";
+        $fechaPHPUnit = "01/01/1970 01:00:00";
+        $fechaTravis = "01/01/1970 00:00:00";
+        $descripcion2 = "\nNormal\nTarros: \$14.8\nTotal abonado: \$14.8\nSaldo(S.E.U.O): \$0\nID Tarjeta: 1";
+
+        $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+        $descripcionTravis = "{$descripcion1}{$fechaTravis}{$descripcion2}";
 
         $this->assertEquals($boleto->obtenerValor(), $tarjeta->obtenerValorViaje());
         $this->assertEquals($boleto->obtenerColectivo(), $colectivo);
         $this->assertEquals($boleto->obtenerTarjeta(), $tarjeta);
-      // valido para PHPUnit local:  $this->assertEquals($boleto->obtenerFecha(), "01/01/1970 01:00:00");
-      // valido para Travis:  $this->assertEquals($boleto->obtenerFecha(), "01/01/1970 00:00:00");
+        $this->assertTrue($boleto->obtenerFecha() === $fechaPHPUnit || $boleto->obtenerFecha() === $fechaTravis);
         $this->assertEquals($boleto->obtenerTarjetaTipo(), "Normal");
         $this->assertEquals($boleto->obtenerTarjetaID(), 1);
         $this->assertEquals($boleto->obtenerTarjetaSaldo(), 0);
         $this->assertEquals($boleto->obtenerTotalAbonado(), $tarjeta->obtenerValorViaje());
-        $this->assertEquals($boleto->obtenerDescripcion(), $descripcion);
+        $this->assertTrue($boleto->obtenerDescripcion() === $descripcionPHPUnit || $boleto->obtenerDescripcion() == $descripcionTravis);
     }
 
 }
