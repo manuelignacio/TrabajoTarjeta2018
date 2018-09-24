@@ -25,7 +25,7 @@ class ColectivoTest extends TestCase {
      */
     public function testPagoConSaldo() {
         $colectivo = new Colectivo("102N","Semtur",23);
-        $tarjeta = new Tarjeta(new Tiempo);
+        $tarjeta = new Tarjeta(1, new Tiempo);
         $tarjeta->recargar(20);
         $boleto = $colectivo->pagarCon($tarjeta);
         $boletoEsperado = new Boleto(14.8,$colectivo,$tarjeta); // el boleto ejemplar que se espera obtener
@@ -39,7 +39,7 @@ class ColectivoTest extends TestCase {
      */
     public function testPagoSinSaldo() {
         $colectivo = new Colectivo("102R","Semtur",120);
-        $tarjeta = new Tarjeta(new Tiempo);
+        $tarjeta = new Tarjeta(1, new Tiempo);
         $tarjeta->recargar(10);
 
         $this->assertNotFalse($colectivo->pagarCon($tarjeta)); // no se usa assertTrue ya que lo que devuelve es un Boleto

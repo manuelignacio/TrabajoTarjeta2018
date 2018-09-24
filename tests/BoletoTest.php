@@ -12,7 +12,7 @@ class BoletoTest extends TestCase {
     public function testObtenerDatos() {
         $valor = 14.80;
         $colectivo = new Colectivo("102R","Semtur",120);
-        $tarjeta = new Tarjeta(new Tiempo);
+        $tarjeta = new Tarjeta(1, new Tiempo);
         $boleto = new Boleto($valor, $colectivo, $tarjeta);
 
         $this->assertEquals($boleto->obtenerValor(), $valor);

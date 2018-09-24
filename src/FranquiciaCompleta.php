@@ -4,7 +4,7 @@ namespace TrabajoTarjeta;
 
 class FranquiciaCompleta extends Tarjeta implements TarjetaInterface {
 
-    public function tipo() {
+    public function obtenerTipo() {
         return "Franquicia Completa";
     }
 

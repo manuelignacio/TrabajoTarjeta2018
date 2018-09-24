@@ -7,7 +7,7 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
     protected $usosEnElDia = 0; // int
     protected $fechaUltimoViajeConFranquicia = 0; // int
 
-    public function tipo() {
+    public function obtenerTipo() {
         return "Medio Boleto";
     }
 

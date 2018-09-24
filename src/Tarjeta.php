@@ -4,13 +4,14 @@ namespace TrabajoTarjeta;
 
 class Tarjeta implements TarjetaInterface {
 
+    protected $id; // int
+    protected $tiempo; // TiempoInterface
     protected $saldo = 0; // float
     protected $valorViaje = 14.8; // float
     protected $plus = 0; // int
-    protected $plusDevueltos = 0; // int
-    protected $usoPlus = false;
-    protected $tiempo; // TiempoInterface
     protected $fechaUltimoViaje = 0; // int
+    protected $usoPlus = false;
+    protected $plusDevueltos = 0; // int
     /**
     * valorViaje corresponde al valor sin franquicia aplicada
     * Luego el metodo obtenerValorViaje se encarga de aplicar las franquicias
@@ -22,15 +23,20 @@ class Tarjeta implements TarjetaInterface {
     * entonces valga 0
     */
 
-    public function __construct(TiempoInterface $tiempo) {
+    public function __construct(int $id, TiempoInterface $tiempo) {
+      $this->id = $id;
       $this->tiempo = $tiempo;
     }
 
-    public function tipo() {
+    public function obtenerTipo() {
       return "Normal";
     }
 
-    public function valor() {
+    public function obtenerId() {
+      return $this->id;
+    }
+
+    public function obtenerValor() {
       return $this->valorViaje;
     }
 
@@ -79,13 +85,13 @@ class Tarjeta implements TarjetaInterface {
     public function obtenerFechaUltimoViaje() {
       return $this->fechaUltimoViaje;
     }
-    
-    public function plusDevueltos() {
-      return $this->plusDevueltos;
+
+    public function obtenerUsoPlus() {
+      return $this->usoPlus;
     }
 
-    public function usoPlus() {
-      return $this->usoPlus;
+    public function obtenerPlusDevueltos() {
+      return $this->plusDevueltos;
     }
 
 }

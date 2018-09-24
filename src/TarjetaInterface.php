@@ -9,14 +9,21 @@ interface TarjetaInterface {
      * 
      * @return string
      */
-    public function tipo();
+    public function obtenerTipo();
+
+    /**
+     * Devuelve el ID de la tarjeta.
+     * 
+     * @return int
+     */
+    public function obtenerId();
 
     /**
      * Devuelve siempre el valor entero de un viaje normal sin franquicia
      * 
      * @return float
      */
-    public function valor();
+    public function obtenerValor();
 
     /**
      * Recarga una tarjeta con un cierto valor de dinero.
@@ -66,13 +73,13 @@ interface TarjetaInterface {
      * 
      * @return int
      */
-    public function plusDevueltos();
+    public function obtenerPlusDevueltos();
     
     /**
      * Devuelve true si el último viaje realizado fue hecho con plus.
      * 
      * @return bool
      */
-    public function usoPlus();
+    public function obtenerUsoPlus();
 
 }
