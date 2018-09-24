@@ -21,15 +21,17 @@ class Boleto implements BoletoInterface {
         // todos los valores internos de la tarjeta se asignan en el constructor para que no varien con el uso de la misma
         $this->fecha = $tarjeta->obtenerFechaUltimoViaje();
         $this->tarjetaTipo = $tarjeta->obtenerTipo();
-        $this->totalAbonado = (int)(!$tarjeta->obtenerUsoPlus()) * ($valor + $tarjeta->obtenerPlusDevueltos() * $tarjeta->obtenerValor());
-        $this->tarjetaSaldo = $tarjeta->obtenerSaldo();
         $this->tarjetaID = $tarjeta->obtenerId();
+        $this->tarjetaSaldo = $tarjeta->obtenerSaldo();
+        $plusAbonados = $tarjeta->obtenerPlusDevueltos() * $tarjeta->obtenerValor();
+        $this->totalAbonado = (int)(!$tarjeta->obtenerUsoPlus()) * ($valor + $plusAbonados);
         $this->descripcion = "";
-        if ($tarjeta->obtenerUsoPlus()) $this->descripcion = "Viaje Plus";
+        if ($tarjeta->obtenerUsoPlus()) $this->descripcion = "Viaje Plus \$0.00\n";
         else {
-            if ($tarjeta->obtenerPlusDevueltos() > 0) $this->descripcion = "Abona {$tarjeta->obtenerPlusDevueltos()} Viajes Plus\n";
-            $this->descripcion .= $this->totalAbonado;
+            if ($tarjeta->obtenerPlusDevueltos() > 0) $this->descripcion = "Abona {$tarjeta->obtenerPlusDevueltos()} Viajes Plus {$plusAbonados} y\n";
+            $this->descripcion .= "Tarros: {$valor}\nTotal abonado: \${$this->totalAbonado}\n";
         }
+        $this->descripcion .= "Saldo(S.E.U.O): \${$this->tarjetaSaldo}";
     }
 
     public function obtenerValor() {
