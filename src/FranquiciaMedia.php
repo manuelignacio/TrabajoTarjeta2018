@@ -16,10 +16,10 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
         $mismoDia = ((int)date("d",$ahora) == (int)date("d",$this->fechaUltimoViajeConFranquicia));
         $diferenciaMenorA24hs = (($ahora - $this->fechaUltimoViajeConFranquicia) < (24 * 60 * 60));
         if ($mismoDia && $diferenciaMenorA24hs) {
-            if ($this->usosEnElDia >= 2) return $this->valorViaje;
+            if ($this->usosEnElDia >= 2) return parent::obtenerValorViaje();
         }
         else $this->usosEnElDia = 0;
-        return ($this->valorViaje / 2);
+        return (parent::obtenerValorViaje() / 2);
     }
 
     public function pagar() {

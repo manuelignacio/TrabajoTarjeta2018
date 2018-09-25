@@ -8,13 +8,16 @@ class Tarjeta implements TarjetaInterface {
     protected $tiempo; // TiempoInterface
     protected $saldo = 0; // float
     protected $valorViaje = 14.8; // float
-    protected $plus = 0; // int
     protected $fechaUltimoViaje = 0; // int
-    protected $usoPlus = false;
+    protected $usoPlus = false; // bool
+    protected $plus = 0; // int
     protected $plusDevueltos = 0; // int
+    protected $lineaUltimoColectivo = ""; // string
+    protected $puedeTransbordo = false; // bool
+    protected $usoTransbordo = false; // bool
     /**
     * valorViaje corresponde al valor sin franquicia aplicada
-    * Luego el metodo obtenerValorViaje se encarga de aplicar las franquicias
+    * Luego el metodo obtenerValorViaje se encarga de aplicar las franquicias y el transbordo
     * 
     * plus indica cuantos viajes plus hay en deuda actualmente
     * 
@@ -55,6 +58,7 @@ class Tarjeta implements TarjetaInterface {
     }
 
     public function obtenerValorViaje() {
+      if ($this->puedeTransbordo) return 33 / 100 * $this->valorViaje;
       return $this->valorViaje;
     }
 
@@ -81,6 +85,25 @@ class Tarjeta implements TarjetaInterface {
       $this->fechaUltimoViaje = $this->tiempo->actual();
       return true;
     }
+
+    public function pagarEn($colectivo) {
+      $ahora = $this->tiempo->actual();
+      $diaDeSemana = date("N", $ahora); // N devuelve el dia de la semana correspondiendo 1 para lunes y 7 para domingo
+      $horaDeDia = date("H", $ahora);
+      $rangoLunAVie6a22 = $diaDeSemana >= 1 && $diaDeSemana <= 5 && $horaDeDia >= 6 && $horaDeDia < 22;
+      $rangoSab6a14 = $diaDeSemana == 6 && $horaDeDia >= 6 && $horaDeDia < 14;
+      if ($rangoLunAVie6a22 || $rangoSab6a14) $lapso = 3600; // 60 min
+      else $lapso = 5400; // 90 min
+
+      $this->puedeTransbordo = ($ahora - $this->fechaUltimoViaje) <= $lapso && !$this->usoTransbordo && $colectivo->linea() != $this->lineaUltimoColectivo;
+
+      if ($this->pagar()) {
+        $this->lineaUltimoColectivo = $colectivo->linea();
+        $this->usoTransbordo = !$this->usoPlus && $this->puedeTransbordo;
+        return true;
+      }
+      return false;
+    }
     
     public function obtenerFechaUltimoViaje() {
       return $this->fechaUltimoViaje;
@@ -96,6 +119,10 @@ class Tarjeta implements TarjetaInterface {
 
     public function obtenerPlusDevueltos() {
       return $this->plusDevueltos;
+    }
+
+    public function obtenerUsoTransbordo() {
+      return $this->usoTransbordo;
     }
 
 }

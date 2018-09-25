@@ -56,9 +56,18 @@ interface TarjetaInterface {
      * 
      * @return bool
      * Devuelve TRUE si puede pagar (si el saldo es suficiente o se abona con plus), o FALSE en caso contrario
-     * Devuelve TRUE si el saldo es suficiente, o FALSE en caso contrario
      */
     public function pagar();
+
+    /**
+     * Esta forma de pago especial tiene en cuenta la linea y bandera en la que esta siendo usada la tarjeta.
+     * 
+     * @param ColectivoInterface $colectivo
+     * 
+     * @return bool
+     * Devuelve TRUE si puede pagar, o FALSE en caso contrario
+     */
+    public function pagarEn($colectivo);
 
     /**
      * Devuelve la fecha en la que se viajó por última vez.
@@ -88,5 +97,12 @@ interface TarjetaInterface {
      * @return int
      */
     public function obtenerPlusDevueltos();
+
+    /**
+     * Devuelve true si el último viaje realizado fue hecho con transbordo.
+     * 
+     * @return bool
+     */
+    public function obtenerUsoTransbordo();
 
 }
