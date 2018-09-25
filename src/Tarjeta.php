@@ -16,7 +16,7 @@ class Tarjeta implements TarjetaInterface {
     * valorViaje corresponde al valor sin franquicia aplicada
     * Luego el metodo obtenerValorViaje se encarga de aplicar las franquicias
     * 
-    * plus indica cuantos viajes plus se estan debiendo actualmente
+    * plus indica cuantos viajes plus hay en deuda actualmente
     * 
     * plusDevueltos indica la cantidad de viajes plus que se devolvieron en
     * el ultimo viaje efectuado, incluso cuando no se devuelva ninguno y
@@ -62,8 +62,8 @@ class Tarjeta implements TarjetaInterface {
       if ($this->saldo < 0) return false; // no se toleraran valores negativos
       
       $precioViaje = $this->obtenerValorViaje();
-      $precioPlusAdeudados = $this->plus * $this->valorViaje;
-      $precioTotal = $precioViaje + $precioPlusAdeudados;
+      $precioPlusEnDeuda = $this->plus * $this->valorViaje;
+      $precioTotal = $precioViaje + $precioPlusEnDeuda;
       $pagaPlus = $this->saldo < $precioTotal;
       
       if ($pagaPlus) {
@@ -88,6 +88,10 @@ class Tarjeta implements TarjetaInterface {
 
     public function obtenerUsoPlus() {
       return $this->usoPlus;
+    }
+
+    public function obtenerPlusEnDeuda() {
+      return $this->plus;
     }
 
     public function obtenerPlusDevueltos() {

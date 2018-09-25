@@ -66,14 +66,6 @@ interface TarjetaInterface {
      * @return int
      */
     public function obtenerFechaUltimoViaje();
-
-    /**
-     * Devuelve la cantidad de viajes plus abonados (devueltos) en el último viaje efectuado.
-     * Si en el último viaje se usó un viaje plus, no se ha devuelto ningún plus.
-     * 
-     * @return int
-     */
-    public function obtenerPlusDevueltos();
     
     /**
      * Devuelve true si el último viaje realizado fue hecho con plus.
@@ -81,5 +73,20 @@ interface TarjetaInterface {
      * @return bool
      */
     public function obtenerUsoPlus();
+
+    /**
+     * Devuelve la cantidad de viajes plus almacenados en deuda.
+     * 
+     * @return int
+     */
+    public function obtenerPlusEnDeuda();
+
+    /**
+     * Devuelve la cantidad de viajes plus abonados (devueltos) en el último viaje efectuado.
+     * Si en el último viaje se usó un viaje plus, considera que no se ha devuelto ningún plus.
+     * 
+     * @return int
+     */
+    public function obtenerPlusDevueltos();
 
 }

@@ -27,7 +27,7 @@ class Boleto implements BoletoInterface {
         $this->totalAbonado = (int)(!$tarjeta->obtenerUsoPlus()) * ($valor + $plusAbonados);
         $this->descripcion = "";
         $this->descripcion .= "Linea: {$colectivo->linea()}\n{$this->fecha}\n";
-        if ($tarjeta->obtenerUsoPlus()) $this->descripcion .= "Viaje Plus \$0.00\n";
+        if ($tarjeta->obtenerUsoPlus()) $this->descripcion .= "Viaje Plus {$tarjeta->obtenerPlusEnDeuda()} \$0.00\n";
         else {
             if ($valor == $tarjeta->obtenerValor()) $this->descripcion .= "Normal\n";
             else $this->descripcion .= "{$this->tarjetaTipo}\n";

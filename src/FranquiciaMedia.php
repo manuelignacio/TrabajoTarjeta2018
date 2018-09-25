@@ -24,8 +24,8 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
 
     public function pagar() {
         $precioViaje = $this->obtenerValorViaje();
-        $precioPlusAdeudados = $this->plus * $this->valorViaje;
-        $precioTotal = $precioViaje + $precioPlusAdeudados;
+        $precioPlusEnDeuda = $this->plus * $this->valorViaje;
+        $precioTotal = $precioViaje + $precioPlusEnDeuda;
         $pagaPlus = $this->saldo < $precioTotal;
 
         $aplicaFranquicia = !$pagaPlus && ($precioViaje < parent::obtenerValorViaje());

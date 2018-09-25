@@ -30,12 +30,98 @@ class BoletoTest extends TestCase {
         $this->assertEquals($boleto->obtenerValor(), $tarjeta->obtenerValorViaje());
         $this->assertEquals($boleto->obtenerColectivo(), $colectivo);
         $this->assertEquals($boleto->obtenerTarjeta(), $tarjeta);
-        $this->assertTrue($boleto->obtenerFecha() === $fechaPHPUnit || $boleto->obtenerFecha() === $fechaTravis);
+        $this->assertContains($boleto->obtenerFecha(), [$fechaPHPUnit, $fechaTravis]);
         $this->assertEquals($boleto->obtenerTarjetaTipo(), "Normal");
         $this->assertEquals($boleto->obtenerTarjetaID(), 1);
         $this->assertEquals($boleto->obtenerTarjetaSaldo(), 0);
         $this->assertEquals($boleto->obtenerTotalAbonado(), $tarjeta->obtenerValorViaje());
-        $this->assertTrue($boleto->obtenerDescripcion() === $descripcionPHPUnit || $boleto->obtenerDescripcion() == $descripcionTravis);
+        $this->assertContains($boleto->obtenerDescripcion(), [$descripcionPHPUnit, $descripcionTravis]);
+    }
+
+    public function testVariaciones() {
+        $tiempo = new TiempoFalso(0);
+        $colectivo = new Colectivo("133N","Semtur",120);
+
+        $tarjeta = new Tarjeta(1, $tiempo);
+
+            $tarjeta->recargar(20);
+            $tiempo->avanzar(1433338200);
+
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $descripcion1 = "Linea: 133N\n";
+            $fechaPHPUnit = "03/06/2015 15:30:00";
+            $descripcion2 = "\nNormal\nTarros: \$14.8\nTotal abonado: \$14.8\nSaldo(S.E.U.O): \$5.2\nID Tarjeta: 1";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
+
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $descripcion2 = "\nViaje Plus 1 \$0.00\nSaldo(S.E.U.O): \$5.2\nID Tarjeta: 1";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
+
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $descripcion2 = "\nViaje Plus 2 \$0.00\nSaldo(S.E.U.O): \$5.2\nID Tarjeta: 1";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
+
+            $tarjeta->recargar(100); // saldo: 105.2
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $descripcion2 = "\nNormal\nAbona 2 Viajes Plus \$29.6 y\nTarros: \$14.8\nTotal abonado: \$44.4\nSaldo(S.E.U.O): \$60.8\nID Tarjeta: 1";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
+
+        $tarjeta = new FranquiciaMedia(2, $tiempo);
+
+            $tarjeta->recargar(10);
+
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $descripcion2 = "\nMedio Boleto\nTarros: \$7.4\nTotal abonado: \$7.4\nSaldo(S.E.U.O): \$2.6\nID Tarjeta: 2";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
+
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $descripcion2 = "\nViaje Plus 1 \$0.00\nSaldo(S.E.U.O): \$2.6\nID Tarjeta: 2";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
+
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $descripcion2 = "\nViaje Plus 2 \$0.00\nSaldo(S.E.U.O): \$2.6\nID Tarjeta: 2";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
+
+            $tarjeta->recargar(100); // saldo: 102.6
+            $tiempo->avanzar(360); // 6 minutos
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $fechaPHPUnit = "03/06/2015 15:36:00";
+            $descripcion2 = "\nMedio Boleto\nAbona 2 Viajes Plus \$29.6 y\nTarros: \$7.4\nTotal abonado: \$37\nSaldo(S.E.U.O): \$65.6\nID Tarjeta: 2";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
+
+            $tiempo->avanzar(360); // 6 minutos
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $fechaPHPUnit = "03/06/2015 15:42:00";
+            $descripcion2 = "\nNormal\nTarros: \$14.8\nTotal abonado: \$14.8\nSaldo(S.E.U.O): \$50.8\nID Tarjeta: 2";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
+
     }
 
 }
