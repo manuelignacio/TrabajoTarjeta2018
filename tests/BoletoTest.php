@@ -135,6 +135,44 @@ class BoletoTest extends TestCase {
             $descripcionTravis = "{$descripcion1}{$fechaTravis}{$descripcion2}";
             $this->assertContains($boleto->obtenerDescripcion(), [$descripcionPHPUnit, $descripcionTravis]);
 
+        $tarjeta = new FranquiciaCompleta(3, $tiempo);
+
+            $tarjeta->recargar(10); // no recarga
+
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $descripcion2 = "\nFranquicia Completa \$0\nTotal abonado: \$0\nSaldo(S.E.U.O): \$0\nTarjeta: 3";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $descripcionTravis = "{$descripcion1}{$fechaTravis}{$descripcion2}";
+            $this->assertContains($boleto->obtenerDescripcion(), [$descripcionPHPUnit, $descripcionTravis]);
+
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $this->assertContains($boleto->obtenerDescripcion(), [$descripcionPHPUnit, $descripcionTravis]);
+
+            $tarjeta->recargar(100); // saldo: 0
+            $tiempo->avanzar(360); // 6 minutos
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $fechaPHPUnit = "03/06/2015 15:48:00";
+            $fechaTravis = "03/06/2015 13:48:00";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $descripcionTravis = "{$descripcion1}{$fechaTravis}{$descripcion2}";
+            $this->assertContains($boleto->obtenerDescripcion(), [$descripcionPHPUnit, $descripcionTravis]);
+
+            $tiempo->avanzar(360); // 6 minutos
+            $valor = $tarjeta->obtenerValorViaje();
+            $tarjeta->pagar();
+            $boleto = new Boleto($valor, $colectivo, $tarjeta);
+            $fechaPHPUnit = "03/06/2015 15:54:00";
+            $fechaTravis = "03/06/2015 13:54:00";
+            $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
+            $descripcionTravis = "{$descripcion1}{$fechaTravis}{$descripcion2}";
+            $this->assertContains($boleto->obtenerDescripcion(), [$descripcionPHPUnit, $descripcionTravis]);
+
     }
 
 }
