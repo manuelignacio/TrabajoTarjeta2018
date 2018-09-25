@@ -26,7 +26,6 @@ class BoletoTest extends TestCase {
 
         $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
         $descripcionTravis = "{$descripcion1}{$fechaTravis}{$descripcion2}";
-        $descripcionTravis = "{$descripcion1}{$fechaTravis}{$descripcion2}";
 
         $this->assertEquals($boleto->obtenerValor(), $tarjeta->obtenerValorViaje());
         $this->assertEquals($boleto->obtenerColectivo(), $colectivo);
