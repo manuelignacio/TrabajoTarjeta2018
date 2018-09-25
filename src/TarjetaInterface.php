@@ -5,6 +5,27 @@ namespace TrabajoTarjeta;
 interface TarjetaInterface {
 
     /**
+     * Devuelve el tipo de franquicia a la que pertenece la tarjeta.
+     * 
+     * @return string
+     */
+    public function obtenerTipo();
+
+    /**
+     * Devuelve el ID de la tarjeta.
+     * 
+     * @return int
+     */
+    public function obtenerId();
+
+    /**
+     * Devuelve siempre el valor entero de un viaje normal sin franquicia
+     * 
+     * @return float
+     */
+    public function obtenerValor();
+
+    /**
      * Recarga una tarjeta con un cierto valor de dinero.
      *
      * @param float $monto
@@ -30,14 +51,6 @@ interface TarjetaInterface {
     public function obtenerValorViaje();
 
     /**
-     * Devuelve la cantidad de viajes plus abonados (devueltos) en el último viaje efectuado.
-     * Si en el último viaje se usó un viaje plus, no se ha devuelto ningún plus.
-     * 
-     * @return int
-     */
-    public function plusDevueltos();
-
-    /**
      * Si el saldo es suficiente, lo resta por pagar un boleto del valor pedido
      * Si el saldo es insuficiente, suma un viaje plus de deuda, hasta el maximo permitido
      * 
@@ -46,5 +59,34 @@ interface TarjetaInterface {
      * Devuelve TRUE si el saldo es suficiente, o FALSE en caso contrario
      */
     public function pagar();
+
+    /**
+     * Devuelve la fecha en la que se viajó por última vez.
+     * 
+     * @return int
+     */
+    public function obtenerFechaUltimoViaje();
+    
+    /**
+     * Devuelve true si el último viaje realizado fue hecho con plus.
+     * 
+     * @return bool
+     */
+    public function obtenerUsoPlus();
+
+    /**
+     * Devuelve la cantidad de viajes plus almacenados en deuda.
+     * 
+     * @return int
+     */
+    public function obtenerPlusEnDeuda();
+
+    /**
+     * Devuelve la cantidad de viajes plus abonados (devueltos) en el último viaje efectuado.
+     * Si en el último viaje se usó un viaje plus, considera que no se ha devuelto ningún plus.
+     * 
+     * @return int
+     */
+    public function obtenerPlusDevueltos();
 
 }
