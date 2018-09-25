@@ -22,7 +22,7 @@ class BoletoTest extends TestCase {
         $descripcion1 = "Linea: 102R\n";
         $fechaPHPUnit = "01/01/1970 01:00:00";
         $fechaTravis = "01/01/1970 00:00:00";
-        $descripcion2 = "\nNormal\nTarros: \$14.8\nTotal abonado: \$14.8\nSaldo(S.E.U.O): \$0\nID Tarjeta: 1";
+        $descripcion2 = "\nNormal \$14.8\nTotal abonado: \$14.8\nSaldo(S.E.U.O): \$0\nTarjeta: 1";
 
         $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
         $descripcionTravis = "{$descripcion1}{$fechaTravis}{$descripcion2}";
@@ -34,7 +34,7 @@ class BoletoTest extends TestCase {
         $this->assertEquals($boleto->obtenerTarjetaTipo(), "Normal");
         $this->assertEquals($boleto->obtenerTarjetaID(), 1);
         $this->assertEquals($boleto->obtenerTarjetaSaldo(), 0);
-        $this->assertEquals($boleto->obtenerTotalAbonado(), $tarjeta->obtenerValorViaje());
+        $this->assertEquals($boleto->obtenerAbonado(), $tarjeta->obtenerValorViaje());
         $this->assertContains($boleto->obtenerDescripcion(), [$descripcionPHPUnit, $descripcionTravis]);
     }
 
@@ -52,21 +52,21 @@ class BoletoTest extends TestCase {
             $boleto = new Boleto($valor, $colectivo, $tarjeta);
             $descripcion1 = "Linea: 133N\n";
             $fechaPHPUnit = "03/06/2015 15:30:00";
-            $descripcion2 = "\nNormal\nTarros: \$14.8\nTotal abonado: \$14.8\nSaldo(S.E.U.O): \$5.2\nID Tarjeta: 1";
+            $descripcion2 = "\nNormal \$14.8\nTotal abonado: \$14.8\nSaldo(S.E.U.O): \$5.2\nTarjeta: 1";
             $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
             $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
 
             $valor = $tarjeta->obtenerValorViaje();
             $tarjeta->pagar();
             $boleto = new Boleto($valor, $colectivo, $tarjeta);
-            $descripcion2 = "\nViaje Plus 1 \$0.00\nSaldo(S.E.U.O): \$5.2\nID Tarjeta: 1";
+            $descripcion2 = "\nViaje Plus 1 \$0.00\nSaldo(S.E.U.O): \$5.2\nTarjeta: 1";
             $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
             $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
 
             $valor = $tarjeta->obtenerValorViaje();
             $tarjeta->pagar();
             $boleto = new Boleto($valor, $colectivo, $tarjeta);
-            $descripcion2 = "\nViaje Plus 2 \$0.00\nSaldo(S.E.U.O): \$5.2\nID Tarjeta: 1";
+            $descripcion2 = "\nViaje Plus 2 \$0.00\nSaldo(S.E.U.O): \$5.2\nTarjeta: 1";
             $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
             $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
 
@@ -74,7 +74,7 @@ class BoletoTest extends TestCase {
             $valor = $tarjeta->obtenerValorViaje();
             $tarjeta->pagar();
             $boleto = new Boleto($valor, $colectivo, $tarjeta);
-            $descripcion2 = "\nNormal\nAbona 2 Viajes Plus \$29.6 y\nTarros: \$14.8\nTotal abonado: \$44.4\nSaldo(S.E.U.O): \$60.8\nID Tarjeta: 1";
+            $descripcion2 = "\nAbona 2 Viajes Plus \$29.6 y\nNormal \$14.8\nTotal abonado: \$44.4\nSaldo(S.E.U.O): \$60.8\nTarjeta: 1";
             $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
             $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
 
@@ -85,21 +85,21 @@ class BoletoTest extends TestCase {
             $valor = $tarjeta->obtenerValorViaje();
             $tarjeta->pagar();
             $boleto = new Boleto($valor, $colectivo, $tarjeta);
-            $descripcion2 = "\nMedio Boleto\nTarros: \$7.4\nTotal abonado: \$7.4\nSaldo(S.E.U.O): \$2.6\nID Tarjeta: 2";
+            $descripcion2 = "\nMedio Boleto \$7.4\nTotal abonado: \$7.4\nSaldo(S.E.U.O): \$2.6\nTarjeta: 2";
             $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
             $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
 
             $valor = $tarjeta->obtenerValorViaje();
             $tarjeta->pagar();
             $boleto = new Boleto($valor, $colectivo, $tarjeta);
-            $descripcion2 = "\nViaje Plus 1 \$0.00\nSaldo(S.E.U.O): \$2.6\nID Tarjeta: 2";
+            $descripcion2 = "\nViaje Plus 1 \$0.00\nSaldo(S.E.U.O): \$2.6\nTarjeta: 2";
             $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
             $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
 
             $valor = $tarjeta->obtenerValorViaje();
             $tarjeta->pagar();
             $boleto = new Boleto($valor, $colectivo, $tarjeta);
-            $descripcion2 = "\nViaje Plus 2 \$0.00\nSaldo(S.E.U.O): \$2.6\nID Tarjeta: 2";
+            $descripcion2 = "\nViaje Plus 2 \$0.00\nSaldo(S.E.U.O): \$2.6\nTarjeta: 2";
             $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
             $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
 
@@ -109,7 +109,7 @@ class BoletoTest extends TestCase {
             $tarjeta->pagar();
             $boleto = new Boleto($valor, $colectivo, $tarjeta);
             $fechaPHPUnit = "03/06/2015 15:36:00";
-            $descripcion2 = "\nMedio Boleto\nAbona 2 Viajes Plus \$29.6 y\nTarros: \$7.4\nTotal abonado: \$37\nSaldo(S.E.U.O): \$65.6\nID Tarjeta: 2";
+            $descripcion2 = "\nAbona 2 Viajes Plus \$29.6 y\nMedio Boleto \$7.4\nTotal abonado: \$37\nSaldo(S.E.U.O): \$65.6\nTarjeta: 2";
             $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
             $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
 
@@ -118,7 +118,7 @@ class BoletoTest extends TestCase {
             $tarjeta->pagar();
             $boleto = new Boleto($valor, $colectivo, $tarjeta);
             $fechaPHPUnit = "03/06/2015 15:42:00";
-            $descripcion2 = "\nNormal\nTarros: \$14.8\nTotal abonado: \$14.8\nSaldo(S.E.U.O): \$50.8\nID Tarjeta: 2";
+            $descripcion2 = "\nNormal \$14.8\nTotal abonado: \$14.8\nSaldo(S.E.U.O): \$50.8\nTarjeta: 2";
             $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
             $this->assertEquals($boleto->obtenerDescripcion(), $descripcionPHPUnit);
 

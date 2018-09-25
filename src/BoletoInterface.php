@@ -58,7 +58,7 @@ interface BoletoInterface {
      * 
      * @return float
      */
-    public function obtenerTotalAbonado();
+    public function obtenerAbonado();
 
     /**
      * Devuelve la descripción a mostrar en el boleto.

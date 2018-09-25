@@ -11,7 +11,7 @@ class Boleto implements BoletoInterface {
     protected $tarjetaTipo; // string
     protected $tarjetaID; // int
     protected $tarjetaSaldo; // float
-    protected $totalAbonado; // float
+    protected $abonado; // float
     protected $descripcion; // string
 
     public function __construct($valor, $colectivo, $tarjeta) {
@@ -24,17 +24,17 @@ class Boleto implements BoletoInterface {
         $this->tarjetaID = $tarjeta->obtenerId();
         $this->tarjetaSaldo = $tarjeta->obtenerSaldo();
         $plusAbonados = $tarjeta->obtenerPlusDevueltos() * $tarjeta->obtenerValor();
-        $this->totalAbonado = (int)(!$tarjeta->obtenerUsoPlus()) * ($valor + $plusAbonados);
+        $this->abonado = (int)(!$tarjeta->obtenerUsoPlus()) * ($valor + $plusAbonados);
         $this->descripcion = "";
         $this->descripcion .= "Linea: {$colectivo->linea()}\n{$this->fecha}\n";
         if ($tarjeta->obtenerUsoPlus()) $this->descripcion .= "Viaje Plus {$tarjeta->obtenerPlusEnDeuda()} \$0.00\n";
         else {
-            if ($valor == $tarjeta->obtenerValor()) $this->descripcion .= "Normal\n";
-            else $this->descripcion .= "{$this->tarjetaTipo}\n";
             if ($tarjeta->obtenerPlusDevueltos() > 0) $this->descripcion .= "Abona {$tarjeta->obtenerPlusDevueltos()} Viajes Plus \${$plusAbonados} y\n";
-            $this->descripcion .= "Tarros: \${$valor}\nTotal abonado: \${$this->totalAbonado}\n";
+            if ($valor == $tarjeta->obtenerValor()) $this->descripcion .= "Normal";
+            else $this->descripcion .= $this->tarjetaTipo;
+            $this->descripcion .= " \${$valor}\nTotal abonado: \${$this->abonado}\n";
         }
-        $this->descripcion .= "Saldo(S.E.U.O): \${$this->tarjetaSaldo}\nID Tarjeta: {$this->tarjetaID}";
+        $this->descripcion .= "Saldo(S.E.U.O): \${$this->tarjetaSaldo}\nTarjeta: {$this->tarjetaID}";
     }
 
     public function obtenerValor() {
@@ -65,8 +65,8 @@ class Boleto implements BoletoInterface {
         return $this->tarjetaSaldo;
     }
 
-    public function obtenerTotalAbonado() {
-        return $this->totalAbonado;
+    public function obtenerAbonado() {
+        return $this->abonado;
     }
 
     public function obtenerDescripcion() {
