@@ -12,7 +12,7 @@ class FranquiciaCompleta extends Tarjeta implements TarjetaInterface {
         return false;
     }
 
-    public function obtenerValorViaje() {
+    public function valorViaje() {
         return 0;
     }
 
