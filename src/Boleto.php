@@ -25,14 +25,17 @@ class Boleto implements BoletoInterface {
         $this->tarjetaSaldo = $tarjeta->obtenerSaldo();
         $plusAbonados = $tarjeta->obtenerPlusDevueltos() * $tarjeta->obtenerValorViaje();
         $this->abonado = (int)(!$tarjeta->obtenerUsoPlus()) * ($valor + $plusAbonados);
+        if ($tarjeta->obtenerUsoTransbordo()) $this->tipo = "Transbordo";
+        else if ($tarjeta->obtenerUsoPlus()) $this->tipo = "Viaje Plus";
+        else if ($valor == $tarjeta->obtenerValorViaje()) $this->tipo = "Normal";
+        else $this->tipo = $this->tarjetaTipo;
         $this->descripcion = "";
         $this->descripcion .= "Linea: {$colectivo->linea()}\n{$this->fecha}\n";
-        if ($tarjeta->obtenerUsoPlus()) $this->descripcion .= "Viaje Plus {$tarjeta->obtenerPlus()} \$0.00\n";
+        if ($tarjeta->obtenerPlusDevueltos() > 0) $this->descripcion .= "Abona {$tarjeta->obtenerPlusDevueltos()} Viajes Plus \${$plusAbonados} y\n";
+        $this->descripcion .= "{$this->tipo} ";
+        if ($tarjeta->obtenerUsoPlus()) $this->descripcion .= "{$tarjeta->obtenerPlus()} \$0.00\n";
         else {
-            if ($tarjeta->obtenerPlusDevueltos() > 0) $this->descripcion .= "Abona {$tarjeta->obtenerPlusDevueltos()} Viajes Plus \${$plusAbonados} y\n";
-            if ($valor == $tarjeta->obtenerValorViaje()) $this->descripcion .= "Normal";
-            else $this->descripcion .= $this->tarjetaTipo;
-            $this->descripcion .= " \${$valor}\nTotal abonado: \${$this->abonado}\n";
+            $this->descripcion .= "\${$valor}\nTotal abonado: \${$this->abonado}\n";
         }
         $this->descripcion .= "Saldo(S.E.U.O): \${$this->tarjetaSaldo}\nTarjeta: {$this->tarjetaID}";
     }

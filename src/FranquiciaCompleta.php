@@ -16,8 +16,8 @@ class FranquiciaCompleta extends Tarjeta implements TarjetaInterface {
         return 0;
     }
 
-    public function pagarEn($colectivo) {
-        $paga = parent::pagarEn($colectivo);
+    public function pagarEn(string $lineaColectivo) {
+        $paga = parent::pagarEn($lineaColectivo);
         $this->usoTransbordo = false;
         return $paga;
     }

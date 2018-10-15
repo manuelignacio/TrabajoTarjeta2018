@@ -88,6 +88,12 @@ class Tarjeta implements TarjetaInterface {
       return true;
     }
 
+    /**
+     * Si se unieran ambos metodos (pagar y pagarEn) en uno,
+     * podria simplificarse un poco la lógica usada, pero
+     * también cambiaría el comportamiento en todos los
+     * tests hechos hasta ahora.
+     */
     public function pagarEn(string $lineaColectivo) {
       $ahora = $this->tiempo->actual();
       $this->puedeTransbordo = ($ahora - $this->fechaUltimoViaje) <= $this->lapsoTransbordo && !$this->usoTransbordo && $lineaColectivo != $this->ultimaLineaColectivo;

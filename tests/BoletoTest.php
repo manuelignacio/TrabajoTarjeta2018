@@ -12,9 +12,10 @@ class BoletoTest extends TestCase {
     public function testObtenerDatos() {
         $tiempo = new TiempoFalso(100);
         $tarjeta = new Tarjeta(1, $tiempo);
+        $valor = $tarjeta->valorViaje();
         $colectivo = new Colectivo("102R","Semtur",120);
 
-        $boleto = new Boleto($tarjeta->valorViaje(), $colectivo, $tarjeta);
+        $boleto = new Boleto($valor, $colectivo, $tarjeta);
 
         /**
          * Existe un conflicto entre la interpretación de fecha en Travis y en PHPUnit instalado con PHP 7.2.4
@@ -27,14 +28,14 @@ class BoletoTest extends TestCase {
         $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
         $descripcionTravis = "{$descripcion1}{$fechaTravis}{$descripcion2}";
 
-        $this->assertEquals($boleto->obtenerValorViaje(), $tarjeta->valorViaje());
+        $this->assertEquals($boleto->obtenerValor(), $valor);
         $this->assertEquals($boleto->obtenerColectivo(), $colectivo);
         $this->assertEquals($boleto->obtenerTarjeta(), $tarjeta);
         $this->assertContains($boleto->obtenerFecha(), [$fechaPHPUnit, $fechaTravis]);
         $this->assertEquals($boleto->obtenerTarjetaTipo(), "Normal");
         $this->assertEquals($boleto->obtenerTarjetaID(), 1);
         $this->assertEquals($boleto->obtenerTarjetaSaldo(), 0);
-        $this->assertEquals($boleto->obtenerAbonado(), $tarjeta->valorViaje());
+        $this->assertEquals($boleto->obtenerAbonado(), $valor);
         $this->assertContains($boleto->obtenerDescripcion(), [$descripcionPHPUnit, $descripcionTravis]);
     }
 
