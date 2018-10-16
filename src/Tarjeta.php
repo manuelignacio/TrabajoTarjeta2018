@@ -64,14 +64,17 @@ class Tarjeta implements TarjetaInterface {
       return $this->valorViaje;
     }
 
-    public function pagar() {
+    public function pagar(string $lineaColectivo) {
       if ($this->saldo < 0) return false; // no se toleraran valores negativos
-      
+
+      $ahora = $this->tiempo->actual();
+      $this->puedeTransbordo = ($ahora - $this->fechaUltimoViaje) <= $this->lapsoTransbordo && !$this->usoTransbordo && $lineaColectivo != $this->ultimaLineaColectivo;
+
       $precioViaje = $this->valorViaje();
       $precioPlusEnDeuda = $this->plus * $this->valorViaje;
-      $precioTotal = $precioViaje + $precioPlusEnDeuda;
+      $precioTotal = round($precioViaje + $precioPlusEnDeuda, 2, PHP_ROUND_HALF_DOWN);
       $pagaPlus = $this->saldo < $precioTotal;
-      
+
       if ($pagaPlus) {
         if ($this->plus >= 2) return false; // como maximo podra adeudar 2 viajes plus
         ++$this->plus;
@@ -85,31 +88,15 @@ class Tarjeta implements TarjetaInterface {
         $this->usoPlus = false;
       }
       $this->fechaUltimoViaje = $this->tiempo->actual();
+      $diaDeSemana = date("N", $ahora); // N devuelve el dia de la semana correspondiendo 1 para lunes y 7 para domingo
+      $horaDeDia = date("H", $ahora);
+      $rangoLunAVie6a22 = $diaDeSemana >= 1 && $diaDeSemana <= 5 && $horaDeDia >= 6 && $horaDeDia < 22;
+      $rangoSab6a14 = $diaDeSemana == 6 && $horaDeDia >= 6 && $horaDeDia < 14;
+      if ($rangoLunAVie6a22 || $rangoSab6a14) $this->lapsoTransbordo = 3600; // 60 min
+      else $this->lapsoTransbordo = 5400; // 90 min
+      $this->ultimaLineaColectivo = $lineaColectivo;
+      $this->usoTransbordo = !$this->usoPlus && $this->puedeTransbordo;
       return true;
-    }
-
-    /**
-     * Si se unieran ambos metodos (pagar y pagarEn) en uno,
-     * podria simplificarse un poco la lógica usada, pero
-     * también cambiaría el comportamiento en todos los
-     * tests hechos hasta ahora.
-     */
-    public function pagarEn(string $lineaColectivo) {
-      $ahora = $this->tiempo->actual();
-      $this->puedeTransbordo = ($ahora - $this->fechaUltimoViaje) <= $this->lapsoTransbordo && !$this->usoTransbordo && $lineaColectivo != $this->ultimaLineaColectivo;
-
-      if ($this->pagar()) {
-        $diaDeSemana = date("N", $ahora); // N devuelve el dia de la semana correspondiendo 1 para lunes y 7 para domingo
-        $horaDeDia = date("H", $ahora);
-        $rangoLunAVie6a22 = $diaDeSemana >= 1 && $diaDeSemana <= 5 && $horaDeDia >= 6 && $horaDeDia < 22;
-        $rangoSab6a14 = $diaDeSemana == 6 && $horaDeDia >= 6 && $horaDeDia < 14;
-        if ($rangoLunAVie6a22 || $rangoSab6a14) $this->lapsoTransbordo = 3600; // 60 min
-        else $this->lapsoTransbordo = 5400; // 90 min
-        $this->ultimaLineaColectivo = $lineaColectivo;
-        $this->usoTransbordo = !$this->usoPlus && $this->puedeTransbordo;
-        return true;
-      }
-      return false;
     }
 
     public function obtenerPlus() {

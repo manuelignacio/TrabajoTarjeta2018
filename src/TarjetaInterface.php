@@ -53,21 +53,13 @@ interface TarjetaInterface {
     /**
      * Si el saldo es suficiente, lo resta por pagar un boleto del valor pedido
      * Si el saldo es insuficiente, suma un viaje plus de deuda, hasta el maximo permitido
-     * 
-     * @return bool
-     * Devuelve TRUE si puede pagar (si el saldo es suficiente o se abona con plus), o FALSE en caso contrario
-     */
-    public function pagar();
-
-    /**
-     * Esta forma de pago especial tiene en cuenta la linea y bandera en la que esta siendo usada la tarjeta.
+     * Tiene en cuenta la linea y bandera en la que esta siendo usada la tarjeta.
      * 
      * @param string $lineaColectivo
      * 
      * @return bool
-     * Devuelve TRUE si puede pagar, o FALSE en caso contrario
      */
-    public function pagarEn(string $lineaColectivo);
+    public function pagar(string $lineaColectivo);
 
     /**
      * Devuelve la cantidad de viajes plus almacenados en deuda.
