@@ -27,14 +27,14 @@ interface TarjetaInterface {
 
     /**
      * Recarga una tarjeta con un cierto valor de dinero.
+     * Devuelve TRUE si el monto a cargar es válido,
+     * o FALSE en caso contrario.
      *
      * @param float $monto
      *
      * @return bool
-     * Devuelve TRUE si el monto a cargar es válido, o FALSE en caso de que no
-     * sea valido.
      */
-    public function recargar($monto);
+    public function recargar(float $monto);
 
     /**
      * Devuelve siempre el valor entero de un viaje normal sin franquicia
@@ -44,11 +44,14 @@ interface TarjetaInterface {
     public function obtenerValorViaje();
 
     /**
-     * Devuelve el valor del boleto a pagar
+     * Devuelve el valor del boleto a pagar,
+     * aplicando transbordo y franquicias si se requiere
+     * 
+     * @param string $lineaColectivo
      * 
      * @return float
      */
-    public function valorViaje();
+    public function valorViaje(string $lineaColectivo);
 
     /**
      * Si el saldo es suficiente, lo resta por pagar un boleto del valor pedido

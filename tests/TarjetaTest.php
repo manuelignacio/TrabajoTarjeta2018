@@ -87,7 +87,7 @@ class TarjetaTest extends TestCase {
         $tarjeta->recargar(50); // se recarga suficiente
         $this->assertTrue($tarjeta->pagar($colectivo1->linea())); // y con este viaje se pagan todos los plus
         $this->assertEquals($tarjeta->obtenerPlusDevueltos(), 2); // podemos comprobar que se devolvieron 2 plus
-        $this->assertEquals($tarjeta->obtenerSaldo(), 15.916); // saldo final: 15.916
+        $this->assertEquals($tarjeta->obtenerSaldo(), 11.12); // saldo final: 15.916
     }
 
     /**
@@ -97,6 +97,7 @@ class TarjetaTest extends TestCase {
     public function testViajesFranquiciaMedia() {
         $tiempoReal = new Tiempo; // testeamos con el tiempo real
         $tarjetaReal = new FranquiciaMedia(1, $tiempoReal);
+        $colectivo1 = new Colectivo("102R","Semtur",120);
 
         $tarjetaReal->recargar(50); // saldo inicial: 50
         $this->assertTrue($tarjetaReal->pagar($colectivo1->linea()));
@@ -154,6 +155,7 @@ class TarjetaTest extends TestCase {
      */
     public function testViajesFranquiciaCompleta() {
         $tarjeta = new FranquiciaCompleta(1, new Tiempo);
+        $colectivo1 = new Colectivo("102R","Semtur",120);
 
         $this->assertTrue($tarjeta->pagar($colectivo1->linea())); // puede viajar desde el comienzo
         $this->assertTrue($tarjeta->pagar($colectivo1->linea())); // tantas veces como quiera
