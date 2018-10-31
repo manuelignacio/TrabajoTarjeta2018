@@ -8,7 +8,7 @@ class FranquiciaCompleta extends Tarjeta implements TarjetaInterface {
         return "Franquicia Completa";
     }
 
-    public function recargar($monto) {
+    public function recargar(float $monto) {
         return false;
     }
 
