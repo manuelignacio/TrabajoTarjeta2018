@@ -88,7 +88,7 @@ class Tarjeta implements TarjetaInterface {
       $ahora = $this->tiempo->actual();
       $precioViaje = $this->valorViaje($lineaColectivo);
       $precioPlusEnDeuda = $this->plus * $this->valorViaje;
-      $precioTotal = round($precioViaje + $precioPlusEnDeuda, 2, PHP_ROUND_HALF_DOWN);
+      $precioTotal = round($precioViaje + $precioPlusEnDeuda, 2, PHP_ROUND_HALF_DOWN); // la cifra del precio se trunca siempre con 2 decimales
       $pagaPlus = $this->saldo < $precioTotal;
 
       if ($pagaPlus) {
@@ -108,8 +108,8 @@ class Tarjeta implements TarjetaInterface {
         $this->usoTransbordo = $this->puedeTransbordo;
       }
 
-      $diaDeSemana = date("N", $ahora); // N devuelve el dia de la semana correspondiendo 1 para lunes y 7 para domingo
-      $horaDeDia = date("H", $ahora);
+      $diaDeSemana = (int) date('N', $ahora); // N devuelve el dia de la semana correspondiendo 1 para lunes y 7 para domingo
+      $horaDeDia = (int) date('G', $ahora); // G devuelve la hora del dia entre 0 y 23
       $rangoLunAVie6a22 = $diaDeSemana >= 1 && $diaDeSemana <= 5 && $horaDeDia >= 6 && $horaDeDia < 22;
       $rangoSab6a14 = $diaDeSemana == 6 && $horaDeDia >= 6 && $horaDeDia < 14;
       $noEsFeriado = !in_array(
