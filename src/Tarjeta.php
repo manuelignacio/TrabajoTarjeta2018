@@ -11,10 +11,11 @@ class Tarjeta implements TarjetaInterface {
     // Factor tiempo:
     protected $tiempo; // TiempoInterface
     // Historial:
+    protected $usoFranquicia = false; // bool
     protected $usoPlus = false; // bool
     protected $usoTransbordo = false; // bool
-    protected $fechaUltimoViaje = 0; // int
     protected $plusDevueltos = 0; // int
+    protected $fechaUltimoViaje = 0; // int
     protected $lapsoTransbordo = 0; // int
     protected $ultimaLineaColectivo = ""; // string
     protected $puedeTransbordo = false; // bool
@@ -137,6 +138,7 @@ class Tarjeta implements TarjetaInterface {
         $this->lapsoTransbordo = 5400; // 90 min
       }
 
+      $this->usoFranquicia = false;
       $this->ultimaLineaColectivo = $lineaColectivo;
       $this->fechaUltimoViaje = $ahora;
 
@@ -147,8 +149,16 @@ class Tarjeta implements TarjetaInterface {
       return $this->plus;
     }
 
+    public function obtenerUsoFranquicia() {
+      return $this->usoFranquicia;
+    }
+
     public function obtenerUsoPlus() {
       return $this->usoPlus;
+    }
+
+    public function obtenerUsoTransbordo() {
+      return $this->usoTransbordo;
     }
 
     public function obtenerPlusDevueltos() {
@@ -157,10 +167,6 @@ class Tarjeta implements TarjetaInterface {
 
     public function obtenerFechaUltimoViaje() {
       return $this->fechaUltimoViaje;
-    }
-
-    public function obtenerUsoTransbordo() {
-      return $this->usoTransbordo;
     }
 
 }

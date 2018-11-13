@@ -91,7 +91,7 @@ class BoletoTest extends TestCase {
             $valor = $tarjeta->valorViaje($colectivo->linea());
             $tarjeta->pagar($colectivo->linea());
             $boleto = new Boleto($valor, $colectivo, $tarjeta);
-            $descripcion2 = "\nMedio Boleto \$7.4\nTotal abonado: \$7.4\nSaldo(S.E.U.O): \$2.6\nTarjeta: 2";
+            $descripcion2 = "\nMedio \$7.4\nTotal abonado: \$7.4\nSaldo(S.E.U.O): \$2.6\nTarjeta: 2";
             $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
             $descripcionTravis = "{$descripcion1}{$fechaTravis}{$descripcion2}";
             $this->assertContains($boleto->obtenerDescripcion(), [$descripcionPHPUnit, $descripcionTravis]);
@@ -119,7 +119,7 @@ class BoletoTest extends TestCase {
             $boleto = new Boleto($valor, $colectivo, $tarjeta);
             $fechaPHPUnit = "03/06/2015 15:36:00";
             $fechaTravis = "03/06/2015 13:36:00";
-            $descripcion2 = "\nAbona 2 Viajes Plus \$29.6 y\nMedio Boleto \$7.4\nTotal abonado: \$37\nSaldo(S.E.U.O): \$65.6\nTarjeta: 2";
+            $descripcion2 = "\nAbona 2 Viajes Plus \$29.6 y\nMedio \$7.4\nTotal abonado: \$37\nSaldo(S.E.U.O): \$65.6\nTarjeta: 2";
             $descripcionPHPUnit = "{$descripcion1}{$fechaPHPUnit}{$descripcion2}";
             $descripcionTravis = "{$descripcion1}{$fechaTravis}{$descripcion2}";
             $this->assertContains($boleto->obtenerDescripcion(), [$descripcionPHPUnit, $descripcionTravis]);
@@ -137,7 +137,7 @@ class BoletoTest extends TestCase {
 
         $tarjeta = new FranquiciaCompleta(3, $tiempo);
 
-            $tarjeta->recargar(10); // no recarga
+            $tarjeta->recargar(10); // no recarga por ser franquicia completa
 
             $valor = $tarjeta->valorViaje($colectivo->linea());
             $tarjeta->pagar($colectivo->linea());

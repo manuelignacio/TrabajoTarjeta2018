@@ -70,6 +70,11 @@ interface TarjetaInterface {
      * @return int
      */
     public function obtenerPlus();
+
+    /**
+     * Devuelve true si en el último viaje realizado se aplicó transbordo.
+     */
+    public function obtenerUsoFranquicia();
     
     /**
      * Devuelve true si el último viaje realizado fue hecho con plus.
@@ -77,6 +82,13 @@ interface TarjetaInterface {
      * @return bool
      */
     public function obtenerUsoPlus();
+
+    /**
+     * Devuelve true si el último viaje realizado fue hecho con transbordo.
+     * 
+     * @return bool
+     */
+    public function obtenerUsoTransbordo();
 
     /**
      * Devuelve la cantidad de viajes plus abonados (devueltos) en el último viaje efectuado.
@@ -92,12 +104,5 @@ interface TarjetaInterface {
      * @return int
      */
     public function obtenerFechaUltimoViaje();
-
-    /**
-     * Devuelve true si el último viaje realizado fue hecho con transbordo.
-     * 
-     * @return bool
-     */
-    public function obtenerUsoTransbordo();
 
 }

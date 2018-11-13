@@ -8,13 +8,13 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
     protected $fechaUltimoViajeConFranquicia = 0; // int
 
     public function obtenerTipo() {
-        return "Medio Boleto";
+        return 'Medio';
     }
 
     public function valorViaje(string $lineaColectivo) {
         $valorViaje = parent::valorViaje($lineaColectivo);
         $ahora = $this->tiempo->actual();
-        $mismoDia = ((int)date("d",$ahora) == (int)date("d",$this->fechaUltimoViajeConFranquicia));
+        $mismoDia = ((int) date('d',$ahora) == (int) date('d',$this->fechaUltimoViajeConFranquicia));
         $diferenciaMenorA24hs = (($ahora - $this->fechaUltimoViajeConFranquicia) < (24 * 60 * 60));
         if ($mismoDia && $diferenciaMenorA24hs) {
             if ($this->usosEnElDia >= 2) return $valorViaje;
@@ -34,7 +34,10 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
             return false; // no podran pasar menos de 5 min entre medio boleto y otro
         $paga = parent::pagar($lineaColectivo);
         if ($paga) {
-            if ($aplicaFranquicia) $this->fechaUltimoViajeConFranquicia = $this->tiempo->actual();
+            if ($aplicaFranquicia) {
+                $this->usoFranquicia = true;
+                $this->fechaUltimoViajeConFranquicia = $this->tiempo->actual();
+            }
             if (!$pagaPlus) $this->usosEnElDia++;
         }
         return $paga;

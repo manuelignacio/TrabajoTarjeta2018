@@ -26,7 +26,7 @@ interface BoletoInterface {
     public function obtenerTarjeta();
 
     /**
-     * Devuelve la fecha en la que se emitio el boleto en formato d/m/Y H:i:s
+     * Devuelve la fecha en la que se emitió el boleto en formato d/m/Y H:i:s
      * 
      * @return int
      */
@@ -42,14 +42,14 @@ interface BoletoInterface {
     /**
      * Devuelve el ID de la tarjeta con la que se abonó.
      * 
-     * @return 
+     * @return int
      */
     public function obtenerTarjetaID();
 
     /**
      * Devuelve el saldo de la tarjeta con la que se abonó.
      * 
-     * @return 
+     * @return float
      */
     public function obtenerTarjetaSaldo();
 
@@ -61,9 +61,22 @@ interface BoletoInterface {
     public function obtenerAbonado();
 
     /**
+     * Devuelve el tipo de boleto emitido, pudiendo ser actualmente:
+     * - Normal
+     * - Normal Transbordo
+     * - Medio
+     * - Medio Transbordo
+     * - Viaje Plus
+     * - Franquicia Completa
+     * 
+     * @return string
+     */
+    public function obtenerTipo();
+
+    /**
      * Devuelve la descripción a mostrar en el boleto.
      * 
-     * @return 
+     * @return string
      */
     public function obtenerDescripcion();
 

@@ -8,7 +8,7 @@ class FranquiciaCompleta extends Tarjeta implements TarjetaInterface {
         return "Franquicia Completa";
     }
 
-    public function recargar(float $monto) {
+    public function recargar($monto) {
         return false;
     }
 
@@ -18,6 +18,7 @@ class FranquiciaCompleta extends Tarjeta implements TarjetaInterface {
 
     public function pagar(string $lineaColectivo) {
         $paga = parent::pagar($lineaColectivo);
+        $this->usoFranquicia = true;
         $this->usoTransbordo = false;
         return $paga;
     }
