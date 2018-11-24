@@ -49,7 +49,9 @@ class Boleto implements BoletoInterface {
         $this->descripcion = "";
         $this->descripcion .= "Linea: {$colectivo->linea()}\n{$this->fecha}\n";
         if ($plusDevueltos > 0) {
-            $this->descripcion .= "Abona {$plusDevueltos} Viajes Plus \${$plusAbonados} y\n";
+            $this->descripcion .= "Abona {$plusDevueltos} Viaje";
+            $this->descripcion .= ($plusDevueltos != 1) ? "s " : " ";
+            $this->descripcion .= "Plus \${$plusAbonados} y\n";
         }
         $this->descripcion .= "{$this->tipo} ";
         if ($usoPlus) {
