@@ -95,7 +95,7 @@ class TarjetaTest extends TestCase {
      * El tiempo es falso (manipulable).
      */
     public function testViajesSinFranquicia() {
-        $tiempo = new TiempoFalso(time());
+        $tiempo = new TiempoFalso(1433338200); // se inicializa en el 03/06/2015 a las 15:30 segun PHPUnit
         $tarjeta = new Tarjeta(1, $tiempo);
         $colectivo1 = new Colectivo("102R","Semtur",120);
         $colectivo2 = new Colectivo("102N","Semtur",119);
@@ -142,7 +142,7 @@ class TarjetaTest extends TestCase {
      * El tiempo es falso (manipulable).
      */
     public function testViajesFranquiciaMedia() {
-        $tiempo = new TiempoFalso(time());
+        $tiempo = new TiempoFalso(1433338200); // se inicializa en el 03/06/2015 a las 15:30 segun PHPUnit
         $tarjeta = new FranquiciaMedia(2, $tiempo);
         $colectivo1 = new Colectivo("102R","Semtur",120);
         $colectivo2 = new Colectivo("102N","Semtur",119);
@@ -210,7 +210,7 @@ class TarjetaTest extends TestCase {
      * El tiempo es falso (manipulable).
      */
     public function testViajesFranquiciaCompleta() {
-        $tiempo = new TiempoFalso(time());
+        $tiempo = new TiempoFalso(1433338200); // se inicializa en el 03/06/2015 a las 15:30 segun PHPUnit
         $tarjeta = new FranquiciaCompleta(1, $tiempo);
         $colectivo1 = new Colectivo("102R","Semtur",120);
         $colectivo2 = new Colectivo("102N","Semtur",119);

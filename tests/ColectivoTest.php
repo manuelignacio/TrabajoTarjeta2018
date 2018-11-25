@@ -28,7 +28,7 @@ class ColectivoTest extends TestCase {
         $tarjeta = new Tarjeta(1, new Tiempo);
         $tarjeta->recargar(20);
         $boleto = $colectivo->pagarCon($tarjeta);
-        $boletoEsperado = new Boleto(14.8,$colectivo,$tarjeta); // el boleto ejemplar que se espera obtener
+        $boletoEsperado = new Boleto($colectivo, $tarjeta); // el boleto ejemplar que se espera obtener
 
         $this->assertEquals($tarjeta->obtenerSaldo(), 5.2); // el saldo se resta correctamente
         $this->assertEquals($boleto,$boletoEsperado); // el boleto emitido es correcto

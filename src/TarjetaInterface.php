@@ -37,21 +37,22 @@ interface TarjetaInterface {
     public function recargar(float $monto);
 
     /**
-     * Devuelve siempre el valor entero de un viaje normal sin franquicia
+     * Devuelve siempre con 2 decimales el valor constante
+     * que representa un viaje normal sin franquicia
+     * aplicada.
      * 
      * @return float
      */
     public function obtenerValorViaje();
 
     /**
-     * Devuelve el valor del boleto a pagar,
-     * aplicando transbordo y franquicias si se requiere
-     * 
-     * @param string $lineaColectivo
+     * Devuelve el valor del ultimo viaje efectuado,
+     * incluyendo transbordo y franquicias aplicadas,
+     * pero exluyendo el concepto de viaje plus.
      * 
      * @return float
      */
-    public function valorViaje(string $lineaColectivo);
+    public function obtenerValorUltimoViaje();
 
     /**
      * Si el saldo es suficiente, lo resta por pagar un boleto del valor pedido

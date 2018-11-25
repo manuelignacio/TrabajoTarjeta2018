@@ -11,6 +11,7 @@ class Tarjeta implements TarjetaInterface {
     // Factor tiempo:
     protected $tiempo; // TiempoInterface
     // Historial:
+    protected $valorUltimoViaje = 0;
     protected $usoFranquicia = false; // bool
     protected $usoPlus = false; // bool
     protected $usoTransbordo = false; // bool
@@ -21,7 +22,7 @@ class Tarjeta implements TarjetaInterface {
     protected $puedeTransbordo = false; // bool
     /**
     * valorViaje corresponde al valor sin franquicia aplicada
-    * Luego el metodo valorViaje se encarga de aplicar las
+    * Luego el metodo valorAPagar se encarga de aplicar las
     * franquicias y el transbordo
     * 
     * plus indica cuantos viajes plus hay en deuda actualmente
@@ -71,10 +72,14 @@ class Tarjeta implements TarjetaInterface {
     }
 
     public function obtenerValorViaje() {
-      return $this->valorViaje;
+      return round($this->valorViaje, 2, PHP_ROUND_HALF_DOWN);
     }
 
-    public function valorViaje(string $lineaColectivo) {
+    public function obtenerValorUltimoViaje() {
+      return $this->valorUltimoViaje;
+    }
+
+    protected function valorAPagar(string $lineaColectivo) {
       $ahora = $this->tiempo->actual();
       $this->puedeTransbordo = ($ahora - $this->fechaUltimoViaje) <= $this->lapsoTransbordo && !$this->usoTransbordo && $lineaColectivo != $this->ultimaLineaColectivo;
       if ($this->puedeTransbordo) {
@@ -87,9 +92,9 @@ class Tarjeta implements TarjetaInterface {
       if ($this->saldo < 0) return false; // no se toleraran valores negativos
 
       $ahora = $this->tiempo->actual();
-      $precioViaje = $this->valorViaje($lineaColectivo);
-      $precioPlusEnDeuda = $this->plus * $this->valorViaje;
-      $precioTotal = round($precioViaje + $precioPlusEnDeuda, 2, PHP_ROUND_HALF_DOWN); // la cifra del precio se trunca siempre con 2 decimales
+      $precioViaje = round($this->valorAPagar($lineaColectivo), 2, PHP_ROUND_HALF_DOWN);
+      $precioPlusEnDeuda = round($this->plus * $this->valorViaje, 2, PHP_ROUND_HALF_DOWN);
+      $precioTotal = $precioViaje + $precioPlusEnDeuda;
       $pagaPlus = $this->saldo < $precioTotal;
 
       if ($pagaPlus) {
@@ -138,6 +143,7 @@ class Tarjeta implements TarjetaInterface {
         $this->lapsoTransbordo = 5400; // 90 min
       }
 
+      $this->valorUltimoViaje = $precioViaje;
       $this->usoFranquicia = false;
       $this->ultimaLineaColectivo = $lineaColectivo;
       $this->fechaUltimoViaje = $ahora;

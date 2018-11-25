@@ -20,8 +20,8 @@ class Boleto implements BoletoInterface {
      * se asignan en el constructor para que no
      * varien con el uso de la misma
      */
-    public function __construct(float $valor, ColectivoInterface $colectivo, TarjetaInterface $tarjeta) {
-        $this->valor = $valor;
+    public function __construct(ColectivoInterface $colectivo, TarjetaInterface $tarjeta) {
+        $this->valor = $tarjeta->obtenerValorUltimoViaje();
         $this->colectivo = $colectivo;
         $this->tarjeta = $tarjeta;
         $this->fecha = date('d/m/Y H:i:s', $tarjeta->obtenerFechaUltimoViaje());
@@ -31,7 +31,7 @@ class Boleto implements BoletoInterface {
         $usoPlus = $tarjeta->obtenerUsoPlus();
         $plusDevueltos = $tarjeta->obtenerPlusDevueltos();
         $plusAbonados = $plusDevueltos * $tarjeta->obtenerValorViaje();
-        $this->abonado = (int) (!$usoPlus) * ($valor + $plusAbonados);
+        $this->abonado = (int) (!$usoPlus) * ($this->valor + $plusAbonados);
         if ($usoPlus) {
             $this->tipo = "Viaje Plus";
         }
@@ -58,7 +58,7 @@ class Boleto implements BoletoInterface {
             $this->descripcion .= "{$tarjeta->obtenerPlus()} \$0.00\n";
         }
         else {
-            $this->descripcion .= "\${$valor}\nTotal abonado: \${$this->abonado}\n";
+            $this->descripcion .= "\${$this->valor}\nTotal abonado: \${$this->abonado}\n";
         }
         $this->descripcion .= "Saldo(S.E.U.O): \${$this->tarjetaSaldo}\nTarjeta: {$this->tarjetaID}";
     }
