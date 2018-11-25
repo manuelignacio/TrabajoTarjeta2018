@@ -4,20 +4,20 @@ namespace TrabajoTarjeta;
 
 class FranquiciaCompleta extends Tarjeta implements TarjetaInterface {
 
-    public function obtenerTipo() {
+    public function obtenerTipo() : string {
         return "Franquicia Completa";
     }
 
-    public function recargar(float $monto) {
+    public function recargar(float $monto) : bool {
         return false;
     }
 
-    protected function valorAPagar(string $lineaColectivo) {
+    protected function valorAPagar(string $lineaColectivo) : float {
         $this->puedeTransbordo = false;
         return 0;
     }
 
-    public function pagar(string $lineaColectivo) {
+    public function pagar(string $lineaColectivo) : bool {
         $ahora = $this->tiempo->actual();
         $precioViaje = $this->valorAPagar($lineaColectivo);
         $this->saldo = 0;

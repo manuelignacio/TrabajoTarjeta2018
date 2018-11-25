@@ -7,11 +7,11 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
     protected $usosEnElDia = 0; // int
     protected $fechaUltimoViajeConFranquicia = 0; // int
 
-    public function obtenerTipo() {
+    public function obtenerTipo() : string {
         return 'Medio';
     }
 
-    protected function valorAPagar(string $lineaColectivo) {
+    protected function valorAPagar(string $lineaColectivo) : float {
         $valorAPagar = parent::valorAPagar($lineaColectivo);
         $ahora = $this->tiempo->actual();
         $mismoDia = ((int) date('d',$ahora) == (int) date('d',$this->fechaUltimoViajeConFranquicia));
@@ -23,7 +23,7 @@ class FranquiciaMedia extends Tarjeta implements TarjetaInterface {
         return $valorAPagar / 2;
     }
 
-    public function pagar(string $lineaColectivo) {
+    public function pagar(string $lineaColectivo) : bool {
         $precioViaje = $this->valorAPagar($lineaColectivo);
         $precioPlusEnDeuda = $this->plus * $this->valorViaje;
         $precioTotal = $precioViaje + $precioPlusEnDeuda;

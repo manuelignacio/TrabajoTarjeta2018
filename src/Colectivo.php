@@ -14,15 +14,15 @@ class Colectivo implements ColectivoInterface {
         $this->numero = $numero;
     }
 
-    public function linea() {
+    public function linea() : string {
         return $this->linea;
     }
 
-    public function empresa() {
+    public function empresa() : string {
         return $this->empresa;
     }
 
-    public function numero() {
+    public function numero() : int {
         return $this->numero;
     }
 

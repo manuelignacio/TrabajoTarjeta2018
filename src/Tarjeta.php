@@ -43,19 +43,19 @@ class Tarjeta implements TarjetaInterface {
      * - Medio
      * - Franquicia Completa
      */
-    public function obtenerTipo() {
+    public function obtenerTipo() : string {
       return "Normal";
     }
 
-    public function obtenerId() {
+    public function obtenerId() : int {
       return $this->id;
     }
 
-    public function obtenerSaldo() {
+    public function obtenerSaldo() : float {
       return $this->saldo;
     }
 
-    public function recargar(float $monto) {
+    public function recargar(float $monto) : bool {
       $montosValidos = array(
         10,
         20,
@@ -78,11 +78,11 @@ class Tarjeta implements TarjetaInterface {
       return false;
     }
 
-    public function obtenerValorViaje() {
+    public function obtenerValorViaje() : float {
       return round($this->valorViaje, 2, PHP_ROUND_HALF_DOWN);
     }
 
-    public function obtenerValorUltimoViaje() {
+    public function obtenerValorUltimoViaje() : float {
       return $this->valorUltimoViaje;
     }
 
@@ -97,7 +97,7 @@ class Tarjeta implements TarjetaInterface {
      * @return float
      *   El valor resultante para el posible viaje.
      */
-    protected function valorAPagar(string $lineaColectivo) {
+    protected function valorAPagar(string $lineaColectivo) : float {
       $ahora = $this->tiempo->actual();
       $this->puedeTransbordo = ($ahora - $this->fechaUltimoViaje) <= $this->lapsoTransbordo && !$this->usoTransbordo && $lineaColectivo != $this->ultimaLineaColectivo;
       if ($this->puedeTransbordo) {
@@ -106,7 +106,7 @@ class Tarjeta implements TarjetaInterface {
       return $this->valorViaje;
     }
 
-    public function pagar(string $lineaColectivo) {
+    public function pagar(string $lineaColectivo) : bool {
       if ($this->saldo < 0) return false; // no se toleraran valores negativos
 
       $ahora = $this->tiempo->actual();
@@ -169,27 +169,27 @@ class Tarjeta implements TarjetaInterface {
       return true;
     }
 
-    public function obtenerPlus() {
+    public function obtenerPlus() : int{
       return $this->plus;
     }
 
-    public function obtenerUsoFranquicia() {
+    public function obtenerUsoFranquicia() : bool {
       return $this->usoFranquicia;
     }
 
-    public function obtenerUsoPlus() {
+    public function obtenerUsoPlus() : bool {
       return $this->usoPlus;
     }
 
-    public function obtenerUsoTransbordo() {
+    public function obtenerUsoTransbordo() : bool {
       return $this->usoTransbordo;
     }
 
-    public function obtenerPlusDevueltos() {
+    public function obtenerPlusDevueltos() : int {
       return $this->plusDevueltos;
     }
 
-    public function obtenerFechaUltimoViaje() {
+    public function obtenerFechaUltimoViaje() : int {
       return $this->fechaUltimoViaje;
     }
 

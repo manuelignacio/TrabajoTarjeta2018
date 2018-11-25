@@ -63,35 +63,35 @@ class Boleto implements BoletoInterface {
         $this->descripcion .= "Saldo(S.E.U.O): \${$this->tarjetaSaldo}\nTarjeta: {$this->tarjetaID}";
     }
 
-    public function obtenerValor() {
+    public function obtenerValor() : float {
         return $this->valor;
     }
 
-    public function obtenerColectivo() {
+    public function obtenerColectivo() : ColectivoInterface {
         return $this->colectivo;
     }
 
-    public function obtenerTarjeta() {
+    public function obtenerTarjeta() : TarjetaInterface {
         return $this->tarjeta;
     }
 
-    public function obtenerFecha() {
+    public function obtenerFecha() : string {
         return $this->fecha;
     }
 
-    public function obtenerTarjetaTipo() {
+    public function obtenerTarjetaTipo() : string {
         return $this->tarjetaTipo;
     }
 
-    public function obtenerTarjetaID() {
+    public function obtenerTarjetaID() : int {
         return $this->tarjetaID;
     }
 
-    public function obtenerTarjetaSaldo() {
+    public function obtenerTarjetaSaldo() : float {
         return $this->tarjetaSaldo;
     }
 
-    public function obtenerAbonado() {
+    public function obtenerAbonado() : float {
         return $this->abonado;
     }
 
@@ -104,11 +104,11 @@ class Boleto implements BoletoInterface {
      * - Viaje Plus
      * - Franquicia Completa
      */
-    public function obtenerTipo() {
+    public function obtenerTipo() : string {
         return $this->tipo;
     }
 
-    public function obtenerDescripcion() {
+    public function obtenerDescripcion() : string {
         return $this->descripcion;
     }
 
