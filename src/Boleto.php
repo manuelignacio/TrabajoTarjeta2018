@@ -12,27 +12,53 @@ class Boleto implements BoletoInterface {
     protected $tarjetaID; // int
     protected $tarjetaSaldo; // float
     protected $abonado; // float
+    protected $tipo; // string
     protected $descripcion; // string
 
-    public function __construct($valor, $colectivo, $tarjeta) {
-        $this->valor = $valor;
+    /**
+     * Todos los valores internos de la tarjeta
+     * se asignan en el constructor para que no
+     * varien con el uso de la misma
+     */
+    public function __construct(ColectivoInterface $colectivo, TarjetaInterface $tarjeta) {
+        $this->valor = $tarjeta->obtenerValorUltimoViaje();
         $this->colectivo = $colectivo;
         $this->tarjeta = $tarjeta;
-        // todos los valores internos de la tarjeta se asignan en el constructor para que no varien con el uso de la misma
-        $this->fecha = date("d/m/Y H:i:s", $tarjeta->obtenerFechaUltimoViaje());
+        $this->fecha = date('d/m/Y H:i:s', $tarjeta->obtenerFechaUltimoViaje());
         $this->tarjetaTipo = $tarjeta->obtenerTipo();
         $this->tarjetaID = $tarjeta->obtenerId();
         $this->tarjetaSaldo = $tarjeta->obtenerSaldo();
-        $plusAbonados = $tarjeta->obtenerPlusDevueltos() * $tarjeta->obtenerValor();
-        $this->abonado = (int)(!$tarjeta->obtenerUsoPlus()) * ($valor + $plusAbonados);
+        $usoPlus = $tarjeta->obtenerUsoPlus();
+        $plusDevueltos = $tarjeta->obtenerPlusDevueltos();
+        $plusAbonados = $plusDevueltos * $tarjeta->obtenerValorViaje();
+        $this->abonado = (int) (!$usoPlus) * ($this->valor + $plusAbonados);
+        if ($usoPlus) {
+            $this->tipo = "Viaje Plus";
+        }
+        else {
+            if ($tarjeta->obtenerUsoFranquicia()) {
+                $this->tipo = $this->tarjetaTipo;
+            }
+            else {
+                $this->tipo = "Normal";
+            }
+            if ($tarjeta->obtenerUsoTransbordo()) {
+                $this->tipo .= " Transbordo";
+            }
+        }
         $this->descripcion = "";
         $this->descripcion .= "Linea: {$colectivo->linea()}\n{$this->fecha}\n";
-        if ($tarjeta->obtenerUsoPlus()) $this->descripcion .= "Viaje Plus {$tarjeta->obtenerPlusEnDeuda()} \$0.00\n";
+        if ($plusDevueltos > 0) {
+            $this->descripcion .= "Abona {$plusDevueltos} Viaje";
+            $this->descripcion .= ($plusDevueltos != 1) ? "s " : " ";
+            $this->descripcion .= "Plus \${$plusAbonados} y\n";
+        }
+        $this->descripcion .= "{$this->tipo} ";
+        if ($usoPlus) {
+            $this->descripcion .= "{$tarjeta->obtenerPlus()} \$0.00\n";
+        }
         else {
-            if ($tarjeta->obtenerPlusDevueltos() > 0) $this->descripcion .= "Abona {$tarjeta->obtenerPlusDevueltos()} Viajes Plus \${$plusAbonados} y\n";
-            if ($valor == $tarjeta->obtenerValor()) $this->descripcion .= "Normal";
-            else $this->descripcion .= $this->tarjetaTipo;
-            $this->descripcion .= " \${$valor}\nTotal abonado: \${$this->abonado}\n";
+            $this->descripcion .= "\${$this->valor}\nTotal abonado: \${$this->abonado}\n";
         }
         $this->descripcion .= "Saldo(S.E.U.O): \${$this->tarjetaSaldo}\nTarjeta: {$this->tarjetaID}";
     }
@@ -67,6 +93,10 @@ class Boleto implements BoletoInterface {
 
     public function obtenerAbonado() {
         return $this->abonado;
+    }
+
+    public function obtenerTipo() {
+        return $this->tipo;
     }
 
     public function obtenerDescripcion() {

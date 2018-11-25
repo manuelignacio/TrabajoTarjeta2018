@@ -19,24 +19,6 @@ interface TarjetaInterface {
     public function obtenerId();
 
     /**
-     * Devuelve siempre el valor entero de un viaje normal sin franquicia
-     * 
-     * @return float
-     */
-    public function obtenerValor();
-
-    /**
-     * Recarga una tarjeta con un cierto valor de dinero.
-     *
-     * @param float $monto
-     *
-     * @return bool
-     *   Devuelve TRUE si el monto a cargar es válido, o FALSE en caso de que no
-     *   sea valido.
-     */
-    public function recargar($monto);
-
-    /**
      * Devuelve el saldo que le queda a la tarjeta.
      *
      * @return float
@@ -44,28 +26,56 @@ interface TarjetaInterface {
     public function obtenerSaldo();
 
     /**
-     * Devuelve el valor del boleto a pagar
+     * Recarga una tarjeta con un cierto valor de dinero.
+     * Devuelve TRUE si el monto a cargar es válido,
+     * o FALSE en caso contrario.
+     *
+     * @param float $monto
+     *
+     * @return bool
+     */
+    public function recargar(float $monto);
+
+    /**
+     * Devuelve siempre con 2 decimales el valor constante
+     * que representa un viaje normal sin franquicia
+     * aplicada.
      * 
      * @return float
      */
     public function obtenerValorViaje();
 
     /**
-     * Si el saldo es suficiente, lo resta por pagar un boleto del valor pedido
-     * Si el saldo es insuficiente, suma un viaje plus de deuda, hasta el maximo permitido
+     * Devuelve el valor del ultimo viaje efectuado,
+     * incluyendo transbordo y franquicias aplicadas,
+     * pero exluyendo el concepto de viaje plus.
      * 
-     * @return bool
-     * Devuelve TRUE si puede pagar (si el saldo es suficiente o se abona con plus), o FALSE en caso contrario
-     * Devuelve TRUE si el saldo es suficiente, o FALSE en caso contrario
+     * @return float
      */
-    public function pagar();
+    public function obtenerValorUltimoViaje();
 
     /**
-     * Devuelve la fecha en la que se viajó por última vez.
+     * Si el saldo es suficiente, lo resta por pagar un boleto del valor pedido
+     * Si el saldo es insuficiente, suma un viaje plus de deuda, hasta el maximo permitido
+     * Tiene en cuenta la linea y bandera en la que esta siendo usada la tarjeta.
+     * 
+     * @param string $lineaColectivo
+     * 
+     * @return bool
+     */
+    public function pagar(string $lineaColectivo);
+
+    /**
+     * Devuelve la cantidad de viajes plus almacenados en deuda.
      * 
      * @return int
      */
-    public function obtenerFechaUltimoViaje();
+    public function obtenerPlus();
+
+    /**
+     * Devuelve true si en el último viaje realizado se aplicó transbordo.
+     */
+    public function obtenerUsoFranquicia();
     
     /**
      * Devuelve true si el último viaje realizado fue hecho con plus.
@@ -75,11 +85,11 @@ interface TarjetaInterface {
     public function obtenerUsoPlus();
 
     /**
-     * Devuelve la cantidad de viajes plus almacenados en deuda.
+     * Devuelve true si el último viaje realizado fue hecho con transbordo.
      * 
-     * @return int
+     * @return bool
      */
-    public function obtenerPlusEnDeuda();
+    public function obtenerUsoTransbordo();
 
     /**
      * Devuelve la cantidad de viajes plus abonados (devueltos) en el último viaje efectuado.
@@ -88,5 +98,12 @@ interface TarjetaInterface {
      * @return int
      */
     public function obtenerPlusDevueltos();
+
+    /**
+     * Devuelve la fecha en la que se viajó por última vez.
+     * 
+     * @return int
+     */
+    public function obtenerFechaUltimoViaje();
 
 }
