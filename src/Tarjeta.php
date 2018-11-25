@@ -37,6 +37,12 @@ class Tarjeta implements TarjetaInterface {
       $this->tiempo = $tiempo;
     }
 
+    /**
+     * Actualmente los tipos de tarjeta posibles son:
+     * - Normal
+     * - Medio
+     * - Franquicia Completa
+     */
     public function obtenerTipo() {
       return "Normal";
     }
@@ -57,7 +63,8 @@ class Tarjeta implements TarjetaInterface {
         50,
         100,
         510.15,
-        962.59);
+        962.59,
+      );
       if (in_array($monto, $montosValidos)) {
         $this->saldo += $monto;
         if ($monto == 510.15) {
@@ -79,6 +86,17 @@ class Tarjeta implements TarjetaInterface {
       return $this->valorUltimoViaje;
     }
 
+    /**
+     * Le permite saber a la tarjeta el valor que pagaría si
+     * se efectuase un viaje en la línea de colectivo dada y
+     * no usara viajes plus.
+     *
+     * @param string $lineaColectivo
+     *   La línea y bandera del colectivo con la que viajaría.
+     *
+     * @return float
+     *   El valor resultante para el posible viaje.
+     */
     protected function valorAPagar(string $lineaColectivo) {
       $ahora = $this->tiempo->actual();
       $this->puedeTransbordo = ($ahora - $this->fechaUltimoViaje) <= $this->lapsoTransbordo && !$this->usoTransbordo && $lineaColectivo != $this->ultimaLineaColectivo;

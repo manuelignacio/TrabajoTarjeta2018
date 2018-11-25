@@ -5,79 +5,86 @@ namespace TrabajoTarjeta;
 interface BoletoInterface {
 
     /**
-     * Devuelve el valor del boleto.
+     * Devuelve el valor de cuánto costó el viaje sin considerar si se
+     * abonaron o gastaron viajes plus.
      *
      * @return float
+     *   El valor del boleto.
      */
-    public function obtenerValor();
+    public function obtenerValor() : float;
 
     /**
-     * Devuelve un objeto que respresenta el colectivo donde se viajó.
+     * Devuelve un objeto que es el colectivo donde se viajó.
      *
      * @return ColectivoInterface
+     *   El colectivo donde se viajó.
      */
-    public function obtenerColectivo();
+    public function obtenerColectivo() : ColectivoInterface;
 
     /**
-     * Devuelve un objeto que respresenta la tarjeta con la que se abonó.
+     * Devuelve un objeto que es la tarjeta con la que se abonó.
      *
      * @return TarjetaInterface
+     *   La tarjeta con la que se abonó el viaje.
      */
-    public function obtenerTarjeta();
+    public function obtenerTarjeta() : TarjetaInterface;
 
     /**
      * Devuelve la fecha en la que se emitió el boleto en formato d/m/Y H:i:s
      * 
-     * @return int
+     * @return string
+     *   La fecha en la que se emitió el boleto.
      */
-    public function obtenerFecha();
+    public function obtenerFecha() : string;
 
     /**
-     * Devuelve el tipo de la tarjeta con la que se abonó.
+     * Devuelve el tipo de la tarjeta con la que se abonó, en el momento de
+     * emisión del boleto.
      * 
      * @return string
+     *   El tipo de la tarjeta con la que se abonó.
      */
-    public function obtenerTarjetaTipo();
+    public function obtenerTarjetaTipo() : string;
 
     /**
-     * Devuelve el ID de la tarjeta con la que se abonó.
+     * Devuelve el ID de la tarjeta con la que se abonó, en el momento de
+     * emisión del boleto.
      * 
      * @return int
      */
-    public function obtenerTarjetaID();
+    public function obtenerTarjetaID() : int;
 
     /**
-     * Devuelve el saldo de la tarjeta con la que se abonó.
+     * Devuelve el saldo de la tarjeta con la que se abonó, en el momento de
+     * emisión del boleto.
      * 
      * @return float
      */
-    public function obtenerTarjetaSaldo();
+    public function obtenerTarjetaSaldo() : float;
 
     /**
-     * Devuelve el total abonado en el viaje.
+     * Devuelve el valor real y neto de cuánto costó el viaje, es decir,
+     * considerando viajes plus, transbordo y franquicias.
      * 
      * @return float
+     *   El total abonado por la tarjeta usada en el viaje.
      */
-    public function obtenerAbonado();
+    public function obtenerAbonado() : float;
 
     /**
-     * Devuelve el tipo de boleto emitido, pudiendo ser actualmente:
-     * - Normal
-     * - Normal Transbordo
-     * - Medio
-     * - Medio Transbordo
-     * - Viaje Plus
-     * - Franquicia Completa
+     * Devuelve el tipo de boleto emitido.
      * 
      * @return string
+     *   El tipo del boleto emitido.
      */
-    public function obtenerTipo();
+    public function obtenerTipo() : string;
 
     /**
-     * Devuelve la descripción a mostrar en el boleto.
+     * Devuelve la descripción a mostrar o imprimir del boleto.
      * 
      * @return string
+     *   La descripción del boleto emitido.
      */
-    public function obtenerDescripcion();
+    public function obtenerDescripcion() : string;
 
 }

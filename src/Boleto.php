@@ -95,6 +95,15 @@ class Boleto implements BoletoInterface {
         return $this->abonado;
     }
 
+    /**
+     * Actualmente los tipos de boleto posibles son:
+     * - Normal
+     * - Normal Transbordo
+     * - Medio
+     * - Medio Transbordo
+     * - Viaje Plus
+     * - Franquicia Completa
+     */
     public function obtenerTipo() {
         return $this->tipo;
     }
